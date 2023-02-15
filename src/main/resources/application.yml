@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/furniture_shop
+    username: root
+    password: admin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+furnitureshop:
+  user:
+    maxLoginAttempts: 3
+    banDuration: 60
+  products:
+    productsPerLine: 5
+    paginationRange: 4
+    pageSizes:
+      - 5
+      - 10
+      - 25
+      - 100
+
+    defaults:
+      page: 1
+      pageSize: 5
+      sortOrder: DESCENDING
+      sortField: price
