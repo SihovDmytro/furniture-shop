@@ -1,49 +1,52 @@
 package com.springtraining.furnitureshop.service;
 
 import com.springtraining.furnitureshop.domain.Product;
-import com.springtraining.furnitureshop.repository.CartRepository;
+import com.springtraining.furnitureshop.entity.ShoppingCart;
+import com.springtraining.furnitureshop.util.Attributes;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.Map;
 
 @Service
 public class CartService {
-    private CartRepository cartRepository;
-
-    public CartService(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
+    public void add(Product product, HttpSession session) {
+        getCart(session).put(product, 1);
     }
 
-    public void add(Product product) {
-        cartRepository.add(product);
+    public void remove(Product product, HttpSession session) {
+        getCart(session).remove(product);
     }
 
-    public void changeCount(Product product, int count) {
-        cartRepository.changeCount(product, count);
+    public void changeCount(Product product, int count, HttpSession session) {
+        ShoppingCart cart = getCart(session);
+        if (cart.containsKey(product)) {
+            cart.replace(product, count);
+        }
     }
 
-    public void remove(Product product) {
-        cartRepository.remove(product);
+    public boolean contains(Product product, HttpSession session) {
+        return getCart(session).containsKey(product);
     }
 
-    public boolean contains(Product product) {
-        return cartRepository.contains(product);
+    public int count(HttpSession session) {
+        return getCart(session).size();
     }
 
-    public int count() {
-        return cartRepository.count();
+    public BigDecimal calculateTotal(HttpSession session) {
+        return getCart(session).getTotal();
     }
 
-    public BigDecimal calculateTotal() {
-        return cartRepository.calculateTotal();
+    public ShoppingCart getCart(HttpSession session) {
+        ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute(Attributes.CART);
+        if (shoppingCart == null) {
+            shoppingCart = new ShoppingCart();
+            session.setAttribute(Attributes.CART, shoppingCart);
+        }
+        return shoppingCart;
     }
 
-    public Map<Product, Integer> getCart() {
-        return cartRepository.getCart();
-    }
-
-    public void clear() {
-        cartRepository.clear();
+    public void clear(HttpSession session) {
+        getCart(session).clear();
     }
 }

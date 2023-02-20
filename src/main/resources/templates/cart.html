@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{cartPage.title}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
+</head>
+<body>
+<div th:include="fragments/localization" class="align-right"></div>
+
+<div class="content-container">
+    <div id="cart-container" th:if="${shoppingCart.size>0}">
+        <table id="cart">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th th:text="#{cartPage.number}"></th>
+                <th th:text="#{cartPage.price}"></th>
+                <th th:text="#{cartPage.total}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <th:block th:each="entry : ${shoppingCart}">
+                <tr>
+                    <td><img th:src="@{${'images/'+entry.key.image}}" width="100" height="100"></td>
+                    <td th:text="${entry.key.name}"></td>
+                    <td><input type="number"
+                               id="countProducts"
+                               min="1"
+                               max="100"
+                               step="1"
+                               th:onclick="'updateCart('+${entry.key.id}+', this);'"
+                               th:value="${entry.value}"/></td>
+                    <td th:text="${entry.key.price}"></td>
+                    <td th:text="${shoppingCart.getTotalForProduct(entry.key)}"></td>
+                    <td th:onclick="'deleteFromCart('+${entry.key.id}+', this);'">
+                        <img th:src="@{images/icons/trash.png}" width="32" height="32"/>
+                    </td>
+                </tr>
+            </th:block>
+            <tr>
+                <td th:text="#{cartPage.cartPrice}"></td>
+                <td th:text="${shoppingCart.total}"></td>
+            </tr>
+        </table>
+        <a th:href="#{/order}" th:text="#{cartPage.proceed}"></a>
+    </div>
+    <div id="empty-cart" th:hidden="${shoppingCart.size>0}">
+        <p th:text="#{cartPage.emptyCart}"></p>
+        <a th:href="@{/products}" th:text="#{cartPage.pickSomeProduct}"></a>
+    </div>
+</div>
+
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{js/cart.js}"></script>
+</body>
+</html>

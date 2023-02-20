@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Sort.Direction;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,13 +21,21 @@ import java.util.List;
 public class ProductBean {
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
+
+    @Size(max = 45, message = "too long name")
     private String name;
     private Category category;
     private List<Producer> producers;
-    private Integer pageSize;
+
+    @Min(1)
+    private Integer size;
+
+    @Min(1)
     private Integer page;
+
     private String sortField;
-    private SortOrder sortOrder;
+
+    private Direction sortOrder;
 
     public boolean isFiltersEmpty() {
         return minPrice == null && maxPrice == null && name == null && category == null && producers == null;

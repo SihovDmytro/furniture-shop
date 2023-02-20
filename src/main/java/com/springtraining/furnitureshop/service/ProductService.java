@@ -4,6 +4,7 @@ package com.springtraining.furnitureshop.service;
 import com.springtraining.furnitureshop.domain.Product;
 import com.springtraining.furnitureshop.entity.ProductBean;
 import com.springtraining.furnitureshop.repository.ProductRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getProducts(ProductBean bean) {
-        return productRepository.getProducts(bean);
+    public Page<Product> getProducts(ProductBean bean) {
+        return productRepository.getProductsPageable(bean);
     }
 
     public long countProducts(ProductBean bean) {

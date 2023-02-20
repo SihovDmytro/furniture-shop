@@ -12,34 +12,36 @@ jQuery(document).ready(function ($) {
 
     pageSize.addEventListener('change', (event) => {
         let params = new URLSearchParams(document.location.search);
-        params.set("pageSize", pageSize.value);
+        params.set("size", pageSize.value);
         document.location.search = params;
     });
 
-    const sortField = document.querySelector('#sortField');
-
-    sortField.addEventListener('change', (event) => {
-        let params = new URLSearchParams(document.location.search);
-        params.set("sortField", sortField.value);
-        document.location.search = params;
-    });
-    const sortOrder = document.querySelector('#sortOrder');
-
-    sortField.addEventListener('change', (event) => {
-        let params = new URLSearchParams(document.location.search);
-        params.set("sortOrder", sortOrder.value);
-        document.location.search = params;
-    });
+    // const sortField = document.querySelector('#sortField');
+    //
+    // sortField.addEventListener('change', (event) => {
+    //     let params = new URLSearchParams(document.location.search);
+    //     params.set("sortField", sortField.value);
+    //     document.location.search = params;
+    // });
+    // const sortOrder = document.querySelector('#sortOrder');
+    //
+    // sortField.addEventListener('change', (event) => {
+    //     let params = new URLSearchParams(document.location.search);
+    //     params.set("sortOrder", sortOrder.value);
+    //     document.location.search = params;
+    // });
 })
 
 function addToCart(id) {
     $.ajax({
         type: "POST",
         url: "cart",
-        data: "productID=" + id,
+        data: JSON.stringify(id),
         dataType: "json",
+        contentType: "application/json",
         success: function (response) {
-            document.getElementById("cart-size").innerHTML = response.count;
+            console.log(response)
+            document.getElementById("cart-size").innerHTML = response.size;
         }
     })
 }

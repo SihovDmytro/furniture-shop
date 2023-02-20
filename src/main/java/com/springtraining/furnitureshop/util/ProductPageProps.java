@@ -15,6 +15,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductPageProps {
     private List<String> pageSizes;
-    private int productsPerLine;
     private int paginationRange;
 }

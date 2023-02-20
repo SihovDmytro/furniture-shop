@@ -5,7 +5,6 @@ import com.springtraining.furnitureshop.domain.Producer;
 import com.springtraining.furnitureshop.domain.Product;
 import com.springtraining.furnitureshop.domain.Product_;
 import com.springtraining.furnitureshop.entity.ProductBean;
-import com.springtraining.furnitureshop.entity.SortOrder;
 import com.springtraining.furnitureshop.repository.CategoryRepository;
 import com.springtraining.furnitureshop.repository.ProducerRepository;
 import com.springtraining.furnitureshop.repository.ProductRepository;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -72,22 +72,22 @@ class ProductRepositoryCriteriaImplTest {
 
     @Test
     public void shouldReturnFilteredProducts() {
-        List<Product> products1 = productRepository.getProducts(
+        List<Product> products1 = productRepository.getProductsPageable(
                 ProductBean.builder().
                         minPrice(new BigDecimal("6")).
-                        build());
-        List<Product> products2 = productRepository.getProducts(
+                        build()).getContent();
+        List<Product> products2 = productRepository.getProductsPageable(
                 ProductBean.builder()
                         .producers(producerRepository.findAll())
                         .category(categoryRepository.findByName("cat1")).name("product1")
-                        .build());
-        List<Product> products3 = productRepository.getProducts(
+                        .build()).getContent();
+        List<Product> products3 = productRepository.getProductsPageable(
                 ProductBean.builder()
                         .page(2)
-                        .pageSize(2)
+                        .size(2)
                         .sortField(Product_.PRICE)
-                        .sortOrder(SortOrder.DESCENDING)
-                        .build());
+                        .sortOrder(Sort.Direction.DESC)
+                        .build()).getContent();
 
         List<Product> expected = getProducts().subList(2, 4);
         expected.sort((Comparator.comparing(Product::getPrice).reversed()));

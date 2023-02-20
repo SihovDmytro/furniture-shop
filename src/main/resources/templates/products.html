@@ -1,147 +1,116 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Products</title>
+    <title th:text="#{productsPage.title}"></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
 </head>
 <body>
 
-<div class="limit">
-    <div class="container-filters">
-        <form class="filter-form" id="filter-form" name="filter-form"
-              th:action="@{/products}" method="get" th:object="${productBean}">
-            <div class="page-size-block">
-                <p>Products per page</p>
-                <select name="pageSize" id="pageSize" th:field="*{pageSize}">
-                    <option th:each="size : ${pageProperties.pageSizes}"
-                            th:value="${size}" th:text="${size}"
-                            th:selected="${productBean.pageSize == size}"></option>
-                </select>
-            </div>
-            <div class="page-size-block">
-                <p>Sort</p>
-                <select name="sortField" id="sortField" th:field="*{sortField}">
-                    <option th:each="sortField : ${sortFields}"
-                            th:value="${sortField}" th:text="${'Sort by ' + sortField}"
-                            th:selected="(${sortField} == ${productBean.sortField})"
-                    ></option>
-                </select>
-                <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
-                    <option th:each="sortOrder : ${sortOrders}"
-                            th:value="${sortOrder}" th:text="${sortOrder}"
-                            th:selected="(${sortOrder} == ${productBean.sortOrder})"
+<div th:include="fragments/localization" class="align-right"></div>
 
-                    ></option>
-                </select>
+<div class="left-sidebar">
+    <form class="filter-form" id="filter-form" name="filter-form"
+          th:action="@{/products}" method="get" th:object="${productBean}">
+        <div class="page-size-block">
+            <p th:text="#{productsPage.productsPerPage}"></p>
+            <select name="pageSize" id="pageSize" th:field="*{size}">
+                <option th:each="pageSize : ${pageProperties.pageSizes}"
+                        th:value="${pageSize}" th:text="${pageSize}"
+                        th:selected="${productBean.size == pageSize}"></option>
+            </select>
+        </div>
+        <div class="page-size-block">
+            <p th:text="#{productsPage.sort}"></p>
+            <select name="sortField" id="sortField" th:field="*{sortField}">
+                <option th:each="sortField : ${sortFields}"
+                        th:value="${sortField}" th:text="${'Sort by ' + sortField}"
+                        th:selected="(${sortField} == ${productBean.sortField})"
+                ></option>
+            </select>
+            <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
+                <option th:each="sortOrder : ${sortOrders}"
+                        th:value="${sortOrder}" th:text="${sortOrder}"
+                        th:selected="(${sortOrder} == ${productBean.sortOrder})"
+                ></option>
+            </select>
+        </div>
+        <div class="filter-block">
+            <p th:text="#{productsPage.price}"></p>
+            <input type="number" name="minPrice" id="minPrice" step="1" min="0" max="999999999"
+                   placeholder="min" th:field="*{minPrice}"
+                   th:value="${productBean.minPrice!=null ? productBean.minPrice : null}">
+            <input type="number" name="maxPrice" id="maxPrice" step="1" min="0" max="999999999"
+                   placeholder="max" th:field="*{maxPrice}"
+                   th:value="${productBean.maxPrice!=null ? productBean.maxPrice : null}">
+        </div>
+        <div class="filter-block">
+            <p th:text="#{productsPage.name}"></p>
+            <input type="text" name="name" id="name" maxlength="45"
+                   th:field="*{name}"
+                   th:value="${productBean.name!=null ? productBean.name : null}">
+        </div>
+        <div class="filter-block">
+            <p th:text="#{productsPage.category}"></p>
+            <select name="category" id="category" th:value="*{category}">
+                <option></option>
+                <option th:each="choice : ${categories}"
+                        th:value="${choice.id}" th:text="${choice.name}"
+                        th:selected="(${productBean.category != null} AND ${choice.id} == ${productBean.category.id})"
+                ></option>
+            </select>
+        </div>
+        <div class="filter-block">
+            <p th:text="#{productsPage.producer}"></p>
+            <div th:each="producer : ${producers}">
+                <input type="checkbox" th:field="*{producers}" th:value="${producer.id}"
+                       th:checked="#{productBean.producers.contains(producer)}">
+                <span th:text="${producer.name}">PRODUCER</span>
             </div>
-            <div class="filter-block">
-                <p>Price</p>
-                <input name="minPrice" id="minPrice" step="1" min="0" max="999999999"
-                       placeholder="min" th:field="*{minPrice}"
-                       th:value="${productBean.minPrice!=null ? productBean.minPrice : null}">
-                <input type="number" name="maxPrice" id="maxPrice" step="1" min="0" max="999999999"
-                       placeholder="max" th:field="*{maxPrice}"
-                       th:value="${productBean.maxPrice!=null ? productBean.maxPrice : null}">
-            </div>
-            <div class="filter-block">
-                <p>Name</p>
-                <input type="text" name="name" id="name" maxlength="45"
-                       th:field="*{name}"
-                       th:value="${productBean.name!=null ? productBean.name : null}">
-            </div>
-            <div class="filter-block">
-                <p>Category</p>
-                <select name="category" id="category" th:value="*{category}">
-                    <option th:each="choice : ${categories}"
-                            th:value="${choice.id}" th:text="${choice.name}"
-                            th:selected="(${productBean.category != null} AND ${choice.id} == ${productBean.category.id})"
-                    ></option>
-                </select>
-            </div>
-            <div class="filter-block">
-                <p>Producer</p>
+        </div>
 
-                <div th:each="producer : ${producers}">
-                    <input type="checkbox" th:field="*{producers}" th:value="${producer.id}"
-                           th:checked="#{productBean.producers.contains(producer)}">
-                    <span th:text="${producer.name}">PRODUCER</span>
-                </div>
-            </div>
-
-            <div>
-                <button id="doFilter">Apply</button>
-            </div>
-        </form>
-    </div>
-    <div class="container-products">
         <div>
-            <a th:href="@{/cart}"><img id="cart-img" th:src="@{/images/icons/cart.png}" width="64" height="64"></a>
-            <label id="cart-size" for="cart-img" th:text="${productsInCart}"></label>
+            <button id="doFilter" th:text="#{productsPage.apply}"></button>
         </div>
+    </form>
+</div>
+<div class="main">
+    <div>
+        <a th:href="@{/cart}"><img id="cart-img" th:src="@{/images/icons/cart.png}" width="64" height="64"></a>
+        <label id="cart-size" for="cart-img" th:text="${productsInCart}"></label>
+    </div>
 
-        <div th:if="${products.size() > 0}">
-
-<!--            <div th:if="${productBean.pageSize < products.size()}">-->
-<!--                <div class="pages" th:with="currPage=${productBean.page}">-->
-<!--                    <div th:if="${currPage>1}">-->
-
-<!--                        <c:forEach begin="${Math.max(currPage - ProductsPageConfig.PAGINATION_RANGE, 1)}" step="1"-->
-<!--                                   end="${currPage-1}" varStatus="loop">-->
-<!--                            <a href=${requestScope.url}?${WebShopUtil.updatePage(requestScope.queryString, loop.index)}>${loop.index}</a>-->
-<!--                        </c:forEach>-->
-<!--                    </div>-->
-
-<!--                    ${currPage}-->
-
-<!--                    <c:set var="lastPage" scope="page"-->
-<!--                           value="${WebShopUtil.getLastPage(requestScope.countProducts, sessionScope.productBean.pageSize)}"/>-->
-<!--                    <c:if test="${currPage < lastPage}">-->
-<!--                        <c:forEach begin="${currPage+1}" step="1"-->
-<!--                                   end="${currPage+ProductsPageConfig.PAGINATION_RANGE}" varStatus="loop">-->
-<!--                            <c:if test="${loop.index <= lastPage}">-->
-<!--                                <a href=${requestScope.url}?${WebShopUtil.updatePage(requestScope.queryString, loop.index)}>${loop.index}</a>-->
-<!--                            </c:if>-->
-<!--                        </c:forEach>-->
-<!--                    </c:if>-->
-<!--                </div>-->
-<!--            </div>-->
-
-            <div th:with="productsInRow=0">
-                <table class="products">
-                    <div th:each="product : ${products}">
-                        <div th:with="productsInRow=${productsInRow+1}">
-                            <div th:if="${productsInRow%pageProperties.productsPerLine==0}">
-                                <tr>
-                            </div>
-                            <td>
-                                <p><img th:src="@{${'/images/'+product.image}}" width="200" height="200"></p>
-                                <hr>
-                                <p th:text="${product.name}"></p>
-                                <p th:text="${product.description}"></p>
-                                <p th:text="'Price: '+ ${product.price} + ' UAN'"></p>
-                                <p th:text="${productsInRow}"></p>
-                                <hr>
-                                <button th:onclick="addToCart(${product.id})">Add to cart</button>
-                            </td>
-
-                            <div th:if="${(productsInRow+1)%pageProperties.productsPerLine==0}">
-                                </tr>
-                            </div>
-                        </div>
-                    </div>
-                </table>
-            </div>
+    <th:block if="${products.content.size() > 0}">
+        <div class="pages">
+            <th:block th:if="${products.totalPages > 0}"
+                      th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/products(page=${pageNumber}, size=${products.size})}+${filters}"
+                   th:text="${pageNumber}"></a>
+            </th:block>
         </div>
-        <div th:unless="${products.size() > 0}">
-            <p>Sorry, your search did not match any products.</p>
-        </div>
+        <ul class="products">
+            <th:block th:each="product : ${products.content}">
+                <li>
+                    <p><img th:src="@{${'/images/'+product.image}}" width="200" height="200"></p>
+                    <hr>
+                    <p th:text="${product.name}"></p>
+                    <p th:text="${product.description}"></p>
+                    <p th:text="'Price: '+ ${product.price} + ' UAN'"></p>
+                    <hr>
+                    <button th:onclick="'addToCart('+${product.id}+');'"
+                            th:text="#{productsPage.message.addToCart}">
+                    </button>
+                </li>
+            </th:block>
+        </ul>
+    </th:block>
+    <div th:unless="${products.content.size() > 0}">
+        <p th:text="#{productsPage.message.productsNotFound}"></p>
     </div>
 </div>
 
+
 <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
-<script th:src="@{/js/localization.js}"></script>
 <script th:src="@{/js/productsPage.js}"></script>
 </body>
 </html>

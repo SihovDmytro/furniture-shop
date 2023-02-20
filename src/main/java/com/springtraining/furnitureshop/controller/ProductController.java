@@ -5,7 +5,6 @@ import com.springtraining.furnitureshop.domain.Producer;
 import com.springtraining.furnitureshop.domain.Product;
 import com.springtraining.furnitureshop.domain.Product_;
 import com.springtraining.furnitureshop.entity.ProductBean;
-import com.springtraining.furnitureshop.entity.SortOrder;
 import com.springtraining.furnitureshop.service.CartService;
 import com.springtraining.furnitureshop.service.CategoryService;
 import com.springtraining.furnitureshop.service.ProducerService;
@@ -15,16 +14,23 @@ import com.springtraining.furnitureshop.util.ProductProps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -67,13 +73,13 @@ public class ProductController {
     }
 
     @ModelAttribute(name = "productsInCart")
-    public int productsInCart() {
-        return cartService.count();
+    public int productsInCart(HttpSession session) {
+        return cartService.count(session);
     }
 
     @ModelAttribute(name = "sortOrders")
-    public List<SortOrder> sortOrders() {
-        return Arrays.asList(SortOrder.DESCENDING, SortOrder.ASCENDING);
+    public List<Direction> sortOrders() {
+        return Arrays.asList(Direction.DESC, Direction.ASC);
     }
 
     @ModelAttribute(name = "categories")
@@ -91,13 +97,38 @@ public class ProductController {
         return new ProductBean();
     }
 
+    @ModelAttribute(name = "locale")
+    public Locale locale(Locale locale) {
+        return locale;
+    }
+
+    @ModelAttribute(name = "filters")
+    public String filters(@RequestParam MultiValueMap<String, String> params) {
+        params.remove("page");
+        params.remove("size");
+        log.info(params.toString());
+        StringBuilder filters = new StringBuilder();
+        for (Map.Entry<String, List<String>> parameter : params.entrySet()) {
+            for (String value : parameter.getValue()) {
+                filters.append("&");
+                filters.append(parameter.getKey()).append("=").append(value);
+            }
+        }
+        log.info(filters.toString());
+        return filters.toString();
+    }
+
     @GetMapping
-    public String getProductsPage(ProductBean productBean, Model model) {
+    public String getProductsPage(@Valid ProductBean productBean, Model model) {
         log.info("getProductsPage() invoked with productBean: " + productBean);
         setRequiredProperties(productBean);
-        List<Product> products = productService.getProducts(productBean);
-        log.trace("found list of products: " + products);
+        Page<Product> products = productService.getProducts(productBean);
+        log.info(String.format("found list of products(%s): %s", products.getSize(), products));
         model.addAttribute("products", products);
+
+        List<Integer> pageNumbers = getPageNumbers(products.getTotalPages(), products.getPageable().getPageNumber());
+        log.info("pageNumbers: " + pageNumbers);
+        model.addAttribute("pageNumbers", pageNumbers);
         return "products";
     }
 
@@ -105,8 +136,8 @@ public class ProductController {
         if (productBean.getPage() == null) {
             productBean.setPage(productProps.getPage());
         }
-        if (productBean.getPageSize() == null) {
-            productBean.setPageSize(productProps.getPageSize());
+        if (productBean.getSize() == null) {
+            productBean.setSize(productProps.getSize());
         }
         if (productBean.getSortField() == null) {
             productBean.setSortField(productProps.getSortField());
@@ -114,5 +145,18 @@ public class ProductController {
         if (productBean.getSortOrder() == null) {
             productBean.setSortOrder(productProps.getSortOrder());
         }
+    }
+
+    private List<Integer> getPageNumbers(int totalPages, int currPage) {
+        List<Integer> pages = new ArrayList<>();
+        int range = pageProps.getPaginationRange();
+        pages.add(1);
+        if (totalPages > 1) {
+            for (int i = Math.max(currPage - range + 1, 2); i < totalPages && currPage + range >= i - 1; i++) {
+                pages.add(i);
+            }
+            pages.add(totalPages);
+        }
+        return pages;
     }
 }

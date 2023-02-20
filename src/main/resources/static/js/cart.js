@@ -1,13 +1,20 @@
 function updateCart(id, e) {
-    if (e.value < 1) {
-        e.value = 1
+    var quantity = e.value;
+    if (quantity == null) {
+        return;
     }
-    if (e.value > 99) {
-        e.value = 99
-    }
+    var data = {}
+    data["productID"] = id;
+    data["quantity"] = e.value
     $.ajax({
         type: "PUT",
-        url: "cart?productID=" + id + "&count=" + e.value,
+        url: "cart",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json",
+        error: function (error) {
+            e.value = e.defaultValue;
+        },
         success: function (response) {
             let tableCart = document.getElementById("cart");
             let currRow = e.parentElement.parentElement.rowIndex;
@@ -21,13 +28,23 @@ function updateCart(id, e) {
 function deleteFromCart(id, row) {
     $.ajax({
         type: "DELETE",
-        url: "cart?productID=" + id,
+        url: "cart",
+        data: JSON.stringify(id),
+        dataType: "json",
+        contentType: "application/json",
         success: function (response) {
             let tableCart = document.getElementById("cart");
-            let currRow = row.parentElement.parentElement.rowIndex;
+            let currRow = row.parentElement.rowIndex;
             tableCart.deleteRow(currRow);
             tableCart.rows[tableCart.rows.length - 1].cells[1].innerHTML = response.cartPrice;
-
+            if (tableCart.rows.length <= 2) {
+                hideCart();
+            }
         }
     })
+}
+
+function hideCart() {
+    document.getElementById("cart-container").hidden = true;
+    document.getElementById("empty-cart").hidden = false;
 }

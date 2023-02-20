@@ -7,9 +7,12 @@ import com.springtraining.furnitureshop.domain.Producer_;
 import com.springtraining.furnitureshop.domain.Product;
 import com.springtraining.furnitureshop.domain.Product_;
 import com.springtraining.furnitureshop.entity.ProductBean;
-import com.springtraining.furnitureshop.entity.SortOrder;
 import com.springtraining.furnitureshop.repository.ProductRepositoryCriteria;
 import com.springtraining.furnitureshop.util.ProductProps;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -52,26 +55,54 @@ public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria 
         setFilters(bean, criteria, root, builder);
         setSort(bean, criteria, root, builder);
 
-        int size = bean.getPageSize() == null ? props.getPageSize() : bean.getPageSize();
+        int size = bean.getSize() == null ? props.getSize() : bean.getSize();
         int currentPage = bean.getPage() == null ? props.getPage() : bean.getPage();
         int from = (currentPage - 1) * size;
 
         return entityManager.createQuery(criteria).setFirstResult(from).setMaxResults(size).getResultList();
     }
 
+    @Override
+    public Page<Product> getProductsPageable(ProductBean bean) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteria = builder.createQuery(Product.class);
+        Root<Product> root = criteria.from(Product.class);
+        criteria.select(root);
+        setFilters(bean, criteria, root, builder);
+        setSort(bean, criteria, root, builder);
+
+        int size = bean.getSize() == null ? props.getSize() : bean.getSize();
+        int currentPage = bean.getPage() == null ? props.getPage() : bean.getPage();
+        currentPage--;
+        Sort.Direction direction = bean.getSortOrder() == null ? props.getSortOrder() : bean.getSortOrder();
+        String sortField = bean.getSortField() == null ? props.getSortField() : bean.getSortField();
+        int from = currentPage * size;
+        List<Product> products = entityManager.createQuery(criteria)
+                .setFirstResult(from)
+                .setMaxResults(size)
+                .getResultList();
+
+        return new PageImpl<>(products,
+                PageRequest.of(
+                        currentPage,
+                        size,
+                        Sort.by(direction, sortField)),
+                countProducts(bean));
+    }
+
 
     private void setSort(ProductBean bean, CriteriaQuery<?> criteria, Root<Product> root, CriteriaBuilder builder) {
         String field = props.getSortField();
-        SortOrder sortOrder = props.getSortOrder();
+        Sort.Direction sortOrder = props.getSortOrder();
         if (bean.getSortField() != null) {
             field = bean.getSortField();
         }
         if (bean.getSortOrder() != null) {
             sortOrder = bean.getSortOrder();
         }
-        if (sortOrder == SortOrder.ASCENDING) {
+        if (sortOrder == Sort.Direction.ASC) {
             criteria.orderBy(builder.asc(root.get(field)));
-        } else if (sortOrder == SortOrder.DESCENDING) {
+        } else if (sortOrder == Sort.Direction.DESC) {
             criteria.orderBy(builder.desc(root.get(field)));
         }
     }
