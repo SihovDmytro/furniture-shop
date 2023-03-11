@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class ProducerService {
-    private ProducerRepository producerRepository;
+    private final ProducerRepository producerRepository;
 
     public ProducerService(ProducerRepository producerRepository) {
         this.producerRepository = producerRepository;

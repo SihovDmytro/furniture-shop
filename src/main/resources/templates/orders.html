@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{ordersPage.title}"></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
+</head>
+<body>
+
+<div th:include="fragments/localization" class="align-right"></div>
+
+<form th:action="@{/login/leave}" method="post">
+    <img th:src="@{'/images/icons/'+${user.avatar}}" width="64" height="64">
+    <div>
+        <button id="leave">Leave</button>
+    </div>
+</form>
+
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+</body>
+</html>

@@ -9,27 +9,34 @@ import com.springtraining.furnitureshop.domain.Product_;
 import com.springtraining.furnitureshop.entity.ProductBean;
 import com.springtraining.furnitureshop.repository.ProductRepositoryCriteria;
 import com.springtraining.furnitureshop.util.ProductProps;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
+@Transactional
 public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria {
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
 
-    private ProductProps props;
+    private final ProductProps props;
 
+    @Autowired
     public ProductRepositoryCriteriaImpl(EntityManager entityManager, ProductProps props) {
         this.entityManager = entityManager;
         this.props = props;
@@ -44,22 +51,6 @@ public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria 
         setFilters(bean, criteria, root, builder);
 
         return entityManager.createQuery(criteria).getSingleResult();
-    }
-
-    @Override
-    public List<Product> getProducts(ProductBean bean) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Product> criteria = builder.createQuery(Product.class);
-        Root<Product> root = criteria.from(Product.class);
-        criteria.select(root);
-        setFilters(bean, criteria, root, builder);
-        setSort(bean, criteria, root, builder);
-
-        int size = bean.getSize() == null ? props.getSize() : bean.getSize();
-        int currentPage = bean.getPage() == null ? props.getPage() : bean.getPage();
-        int from = (currentPage - 1) * size;
-
-        return entityManager.createQuery(criteria).setFirstResult(from).setMaxResults(size).getResultList();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.springtraining.furnitureshop.repository.UserRepository;
 import com.springtraining.furnitureshop.util.UserProps;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -36,20 +37,22 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean login(String login, String password) {
+    public List<String> login(String login, String password) {
         Optional<User> userOptional = userRepository.findByLogin(login);
         User user = userOptional.orElse(null);
+        List<String> errors = new ArrayList<>();
         if (user == null) {
-            return false;
+            errors.add("loginPage.message.wrongCredentials");
+            return errors;
         }
 
         if (isUserBanned(user)) {
-            return false;
+            errors.add("loginPage.message.userIsBanned");
+            return errors;
         } else {
             user.setUnban(null);
         }
 
-        boolean result = true;
         if (!user.getPassword().equals(password)) {
             int attempts = user.getAttempts();
             if (++attempts >= userProps.getMaxLoginAttempts()) {
@@ -60,16 +63,15 @@ public class UserService {
             } else {
                 user.setAttempts(attempts);
             }
-            result = false;
+            errors.add("loginPage.message.wrongCredentials");
         }
         userRepository.save(user);
-        return result;
+        return errors;
     }
 
     public boolean isUserBanned(User user) {
         return user != null &&
                 user.getUnban() != null &&
                 user.getUnban().after(Calendar.getInstance());
-
     }
 }

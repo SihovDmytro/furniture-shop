@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class CaptchaService {
-    private CaptchaProviderStrategy captchaProvider;
+    private final CaptchaProviderStrategy captchaProvider;
 
     public CaptchaService(CaptchaProviderStrategy captchaProvider) {
         this.captchaProvider = captchaProvider;
