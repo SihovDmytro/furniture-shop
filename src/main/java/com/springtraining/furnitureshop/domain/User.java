@@ -1,8 +1,7 @@
 package com.springtraining.furnitureshop.domain;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,9 +19,9 @@ import javax.persistence.TemporalType;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@ToString
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
@@ -64,6 +63,22 @@ public class User implements UserDetails {
     @Column(length = 25, nullable = false)
     private String avatar;
 
+    private User() {
+    }
+
+    public User(String login, String name, String surname, String password, String email, boolean sendMail, Role role, int attempts, Calendar unban, String avatar) {
+        this.login = login;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.email = email;
+        this.sendMail = sendMail;
+        this.role = role;
+        this.attempts = attempts;
+        this.unban = unban;
+        this.avatar = avatar;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.toString()));
@@ -98,16 +113,106 @@ public class User implements UserDetails {
         ADMIN, USER
     }
 
-    public User(String login, String name, String surname, String password, String email, boolean sendMail, Role role, int attempts, Calendar unban, String avatar) {
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isSendMail() {
+        return sendMail;
+    }
+
+    public void setSendMail(boolean sendMail) {
         this.sendMail = sendMail;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(int attempts) {
         this.attempts = attempts;
+    }
+
+    public Calendar getUnban() {
+        return unban;
+    }
+
+    public void setUnban(Calendar unban) {
         this.unban = unban;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (!Objects.equals(login, user.login)) return false;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = login != null ? login.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
     }
 }

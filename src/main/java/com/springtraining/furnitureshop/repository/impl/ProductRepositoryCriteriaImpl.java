@@ -107,7 +107,8 @@ public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria 
 
         if (!bean.isFiltersEmpty()) {
             if (bean.getName() != null) {
-                predicates.add(builder.equal(root.get(Product_.name),
+                // TODO: 11.03.2023 check if works
+                predicates.add(builder.like(root.get(Product_.name),
                         bean.getName()));
             }
             if (bean.getMinPrice() != null) {
