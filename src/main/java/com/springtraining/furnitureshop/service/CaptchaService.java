@@ -2,6 +2,8 @@ package com.springtraining.furnitureshop.service;
 
 
 import com.springtraining.furnitureshop.captcha.strategy.CaptchaProviderStrategy;
+import com.springtraining.furnitureshop.captcha.strategy.impl.CaptchaProviderHiddenFieldStrategyImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import java.util.Optional;
 public class CaptchaService {
     private final CaptchaProviderStrategy captchaProvider;
 
+    @Autowired
     public CaptchaService(CaptchaProviderStrategy captchaProvider) {
         this.captchaProvider = captchaProvider;
     }

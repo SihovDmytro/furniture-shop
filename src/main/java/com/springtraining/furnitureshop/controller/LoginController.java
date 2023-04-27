@@ -42,36 +42,35 @@ public class LoginController {
 
     @GetMapping
     public String displayLoginPage(Model model, HttpSession session) {
+        log.trace("displayLoginPage() start");
         BindingResult errors = (BindingResult) session.getAttribute("login.errors");
-        log.info("displayLoginPage() errors: " + errors);
+        log.info("errors: " + errors);
         model.addAttribute("errors", errors);
         session.removeAttribute("login.errors");
+        log.trace("displayLoginPage() end");
         return "login";
     }
 
     @PostMapping
     public String login(@Valid LoginBean loginBean, BindingResult errors, HttpSession session) {
-        log.info("login() errors: " + errors);
-        log.info("login attempt. LoginBean: " + loginBean);
+        log.trace("login() start");
+        log.info("errors: " + errors);
+        log.info("loginBean: " + loginBean);
         if (errors.hasErrors()) {
             session.setAttribute("login.errors", errors);
             return "redirect:/login";
         }
         List<String> loginResult = userService.login(loginBean.getLogin(), loginBean.getPassword());
         if (loginResult.isEmpty()) {
+            log.info("successful log in");
             // TODO: 021 21.02.23 add user in session
         } else {
+            log.info("cannot log in");
             for (String message : loginResult) {
                 errors.addError(new ObjectError("loginError", message));
             }
             session.setAttribute("login.errors", errors);
         }
-        return "redirect:/login";
-    }
-
-    @PostMapping(path = "/leave")
-    public String leave(){
-        // TODO: 021 21.02.23 remove user from session
         return "redirect:/login";
     }
 }

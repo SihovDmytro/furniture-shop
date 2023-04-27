@@ -8,11 +8,15 @@ spring:
 #      ddl-auto: create
 
 furnitureshop:
+  localization:
+    defaultLocale: en-US
+    cookieMaxAge: 30
   user:
     maxLoginAttempts: 3
     banDuration: 60
+  avatar:
+    directory: "avatars/"
   products:
-    productsPerLine: 5
     paginationRange: 4
     pageSizes:
       - 5
@@ -22,6 +26,6 @@ furnitureshop:
 
     defaults:
       page: 1
-      pageSize: 5
+      size: 5
       sortOrder: desc
       sortField: price

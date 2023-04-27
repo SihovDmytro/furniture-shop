@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{errorPage.title}"></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
+</head>
+<body>
+
+<div th:include="fragments/localization" class="align-right"></div>
+
+<div>
+    <h1 th:text="#{title}"></h1>
+    <a th:href="@{${referrer}}" th:text="#{errorPage.backToPrevPage}"></a>
+</div>
+
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+</body>
+</html>

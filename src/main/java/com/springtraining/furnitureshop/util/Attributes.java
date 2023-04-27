@@ -8,7 +8,7 @@ public class Attributes {
     public static final String PRODUCERS_SERVICE = "producersService";
     public static final String PRODUCTS_SERVICE = "productsService";
     public static final String ORDERS_SERVICE = "ordersService";
-    public static final String REGISTRATION_BEAN = "regBean";
+    public static final String REGISTRATION_BEAN = "registrationBean";
     public static final String PRODUCTS_PAGE_BEAN = "productsPageBean";
     public static final String CAPTCHA = "captcha";
     public static final String CAPTCHA_MAP = "captchaMap";

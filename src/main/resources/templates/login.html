@@ -13,32 +13,40 @@
 <a th:href="@{/products}">Show products</a>
 <div class="container-login100">
     <div class="wrap-login100">
-        <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/login}" th:object="${loginBean}" method="POST">
+        <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/login}" th:object="${loginBean}" method="post">
+
             <span class="login100-form-title" th:text="#{loginPage.title}"></span>
             <div th:if="${errors!=null and errors.hasGlobalErrors()}">
                 <p th:each="error : ${errors.getGlobalErrors()}" th:text="#{${error.getDefaultMessage()}}"></p>
             </div>
+
             <div class="wrap-input100 m-b-16">
-                <input class="input100" type="text" name="login" id="login" th:placeholder="#{loginPage.login}"
+                <input class="input100" type="text" name="login" id="login"
+                       th:placeholder="#{loginPage.login}"
                        th:field="*{login}">
                 <span th:if="${errors!=null and errors.hasFieldErrors('login')}">
-                    <th:block th:each="error : ${errors.getFieldErrors('login')}" th:text="${error.getDefaultMessage()}">
+                    <th:block th:each="error : ${errors.getFieldErrors('login')}"
+                              th:text="${error.getDefaultMessage()}">
                     </th:block>
                 </span>
             </div>
+
             <div class="wrap-input100">
                 <input class="input100" type="password" name="password" id="password"
-                       th:placeholder="#{loginPage.password}" th:field="*{password}">
+                       th:placeholder="#{loginPage.password}"
+                       th:field="*{password}">
                 <span class="passwordError"
                       th:if="${errors!=null and errors.hasFieldErrors('password')}">
-                    <th:block th:each="error : ${errors.getFieldErrors('password')}" th:text="${error.getDefaultMessage()}">
+                    <th:block th:each="error : ${errors.getFieldErrors('password')}"
+                              th:text="${error.getDefaultMessage()}">
                     </th:block>
                 </span>
 
             </div>
+
             <div class="p-t-13 p-b-23"></div>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" id="submitLogin" th:text="#{loginPage.submit}"></button>
+                <input type="submit" class="login100-form-btn" id="submitLogin" th:value="#{loginPage.submit}">
             </div>
             <div class="flex-col-c p-t-100 p-b-40">
                 <span class="txt1 p-b-9" th:text="#{loginPage.createAcc}"></span>
@@ -49,6 +57,6 @@
 </div>
 
 <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
-<script th:src="@{/js/validateLogin.js}"></script>
+<!--<script th:src="@{/js/validateLogin.js}"></script>-->
 </body>
 </html>

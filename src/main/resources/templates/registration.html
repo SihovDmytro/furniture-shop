@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{registrationPage.title}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:include="fragments/localization" class="align-right"></div>
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form p-l-55 p-r-55 p-t-178"
+                  th:action="@{/registration}"
+                  th:object="${registrationBean}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" th:field="*{pageGenerationTime}" >
+                <span class="login100-form-title" th:text="#{registrationPage.title}"></span>
+
+                <div th:if="${errors!=null and errors.hasGlobalErrors()}">
+                    <p th:each="error : ${errors.getGlobalErrors()}" th:text="#{${error.getDefaultMessage()}}"></p>
+                </div>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="text" name="login" id="login"
+                           th:field="*{login}"
+                           th:placeholder="#{registrationPage.login}"
+                           th:value="${registrationBean.login}">
+                    <span id="loginError" th:text="#{registrationPage.loginError}"></span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('login')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('login')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="text" name="name" id="name"
+                           th:field="*{name}"
+                           th:placeholder="#{registrationPage.name}"
+                           th:value="${registrationBean.name}">
+                    <span id="nameError" th:text="#{registrationPage.nameError}"></span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('name')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('name')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="text" name="surname" id="surname"
+                           th:field="*{surname}"
+                           th:placeholder="#{registrationPage.surname}"
+                           th:value="${registrationBean.surname}">
+                    <span id="surnameError" th:text="#{registrationPage.surnameError}"> </span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('surname')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('surname')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="password" name="password" id="password"
+                           th:field="*{password}"
+                           th:placeholder="#{registrationPage.password}">
+                    <span id="passwordError" th:text="#{registrationPage.passwordError}"></span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('password')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('password')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="password" name="confirm" id="confirm"
+                           th:field="*{confirm}"
+                           th:placeholder="#{registrationPage.confirm}">
+                    <span id="confirmError" th:text="#{registrationPage.message.differentPasswords}"></span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('confirm')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('confirm')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100">
+                    <input class="input100" type="email" name="email" id="email"
+                           th:field="*{email}"
+                           th:placeholder="#{registrationPage.email}"
+                           th:value="${registrationBean.email}">
+                    <span id="emailError" th:text="#{registrationPage.emailError}"></span>
+                    <span th:if="${errors!=null and errors.hasFieldErrors('email')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('email')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100">
+                    <input type="checkbox" name="sendMail" id="sendMail" value="true">
+                    <label for="sendMail" th:field="*{sendMail}" th:text="#{registrationPage.label.sendMail}"></label>
+                </div>
+
+                <div class="wrap-input100">
+                    <img th:src="@{/captcha-generator(text=${captcha})}">
+                    <input class="input100" type="text" name="userCaptcha" id="userCaptcha"
+                           th:field="*{captcha}"
+                           th:placeholder="#{registrationPage.captcha}">
+                    <input type="hidden" id="captchaID" name="captchaID"
+                           th:field="*{captchaHiddenField}">
+                    <span th:if="${errors!=null and errors.hasFieldErrors('captcha')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('captcha')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 p-t-13 p-b-23">
+                    <label for="avatar" th:text="#{registrationPage.label.avatar}+${avatarSize}"></label>
+                    <input type="file" name="avatar" id="avatar" accept="image/*">
+                    <span th:if="${errors!=null and errors.hasFieldErrors('avatar')}">
+                        <th:block th:each="error : ${errors.getFieldErrors('avatar')}"
+                                  th:text="#{${error.getDefaultMessage()}}">
+                        </th:block>
+                    </span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" id="submitRegistration"
+                            th:text="#{registrationPage.button.create}"></button>
+                </div>
+
+                <div class="flex-col-c p-t-170 p-b-40">
+                    <span class="txt1 p-b-9" th:text="#{registrationPage.alreadyReg}"></span>
+                    <a th:href="@{/login}" class="txt3" th:text="#{loginPage.title}"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/validateRegistration.js}"></script>
+</body>
+</html>
