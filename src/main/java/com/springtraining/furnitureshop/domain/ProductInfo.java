@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,7 +22,7 @@ public class ProductInfo {
     @Id
     @Column(name = "product_info_id", nullable = false)
     private Long id;
-
+    // TODO: 11.03.2023 refactor class
     @Column(name = "name", nullable = false, length = 45)
     private String name;
 

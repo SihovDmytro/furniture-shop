@@ -13,7 +13,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -37,7 +36,7 @@ public class Order {
     @Id
     @Column(name = "order_id", nullable = false)
     private Long id;
-
+    // TODO: 11.03.2023 refactor
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
