@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.unit.DataSize;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Component
-@ConfigurationProperties(prefix = "furnitureshop.localization")
-public class LocalizationProps {
-    private String defaultLocale;
-    private int cookieMaxAge;
+@ConfigurationProperties(prefix = "furnitureshop.avatar")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AvatarProps {
+    private String directory;
+    private DataSize maxFileSize;
 }

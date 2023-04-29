@@ -1,17 +1,17 @@
 const submitRegistration = document.getElementById("submitRegistration");
-console.log("submitRegistration: "+submitRegistration);
+console.log("submitRegistration: " + submitRegistration);
 
 const loginError = document.getElementById("loginError");
 const passwordError = document.getElementById("passwordError");
 const emailError = document.getElementById("emailError");
-const passwordRepeatError = document.getElementById("passwordRepeatError");
+const confirmError = document.getElementById("confirmError");
 const nameError = document.getElementById("nameError")
 const surnameError = document.getElementById("surnameError")
 
 loginError.hidden = true;
 passwordError.hidden = true;
 emailError.hidden = true;
-passwordRepeatError.hidden = true;
+confirmError.hidden = true;
 nameError.hidden = true;
 surnameError.hidden = true;
 
@@ -19,12 +19,12 @@ submitRegistration.addEventListener("click", function (e) {
         let loginField = document.getElementById("login");
         let emailField = document.getElementById("email");
         let passwordField = document.getElementById("password");
-        let passwordRepeatField = document.getElementById("repeat-password");
+        let confirmField = document.getElementById("confirm");
         let nameField = document.getElementById("name");
         let surnameField = document.getElementById("surname");
         loginError.hidden = true;
         passwordError.hidden = true;
-        passwordRepeatError.hidden = true;
+        confirmError.hidden = true;
         nameError.hidden = true;
         surnameError.hidden = true;
 
@@ -38,8 +38,8 @@ submitRegistration.addEventListener("click", function (e) {
             passwordError.hidden = false;
             valid = false;
         }
-        if (!validatePasswordRepeat(passwordField.value, passwordRepeatField.value)) {
-            passwordRepeatError.hidden = false;
+        if (!validatePasswordRepeat(passwordField.value, confirmField.value)) {
+            confirmError.hidden = false;
             valid = false;
         }
         if (!validateEmail(emailField.value)) {
@@ -127,9 +127,9 @@ function validateEmail(email) {
 }
 
 function validateName(name) {
-    return name.length >= 1 && name.length <= 25;
+    return name.length >= 1 && name.length <= 30;
 }
 
 function validateSurname(surname) {
-    return surname.length >= 1 && surname.length <= 25;
+    return surname.length >= 1 && surname.length <= 30;
 }

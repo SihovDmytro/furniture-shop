@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @Column(name = "surname", nullable = false, length = 30)
     private String surname;
 
-    @Column(name = "password", nullable = false, length = 64)
+    @Column(name = "password", nullable = false, length = 60)
     private String password;
 
     @Column(name = "email", nullable = false, length = 30)
@@ -96,7 +96,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return getUnban() == null || getUnban().before(Calendar.getInstance());
     }
 
     @Override

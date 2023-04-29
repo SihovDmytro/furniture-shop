@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{homePage.title}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:include="fragments/localization" class="align-right"></div>
+<div class="container-login100">
+    <div class="wrap-login100">
+        <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/logout}" method="post">
+    <span class="login100-form-title">
+        <p th:text="#{homePage.welcome}+${user.login}"></p>
+                <img th:src="@{${'/avatars/'+user.avatar}}" width="64" height="64">
+    </span>
+            <div class="p-t-13 p-b-23"></div>
+            <div class="container-login100-form-btn">
+                <button class="login100-form-btn" id="leave" th:text="#{homePage.leave}"></button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+</body>
+</html>

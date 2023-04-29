@@ -5,18 +5,26 @@ spring:
     password: admin
   jpa:
     show-sql: true
-management:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
   endpoints:
     web:
       exposure:
         include: "*"
+
+
 furnitureshop:
   localization:
     defaultLocale: en-US
     cookieMaxAge: 30
   user:
     maxLoginAttempts: 3
-    banDuration: 60
+    banDuration: 600
+  avatar:
+    directory: "avatars/"
+    max-file-size: 5MB
   products:
     paginationRange: 4
     pageSizes:
@@ -30,3 +38,6 @@ furnitureshop:
       size: 5
       sortOrder: desc
       sortField: price
+logging:
+  level:
+    com.springtraining.furnitureshop: TRACE

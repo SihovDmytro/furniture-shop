@@ -3,9 +3,9 @@
 <body>
 <div th:fragment="localization">
     <select id="select-locale" onchange="changeLanguage()">
-        <option value="en" th:text="#{lang.en}" th:selected="${locale.language == 'en'}"></option>
-        <option value="ru" th:text="#{lang.ru}" th:selected="${locale.language == 'ru'}"></option>
-        <option value="uk" th:text="#{lang.uk}" th:selected="${locale.language == 'uk'}"></option>
+        <option value="en" th:text="#{lang.en}" th:selected="${locale == null || locale.language == 'en'}"></option>
+        <option value="ru" th:text="#{lang.ru}" th:selected="${locale != null && locale.language == 'ru'}"></option>
+        <option value="uk" th:text="#{lang.uk}" th:selected="${locale != null && locale.language == 'uk'}"></option>
     </select>
 </div>
 <script th:src="@{/js/localization.js}"></script>
