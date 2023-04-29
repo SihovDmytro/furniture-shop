@@ -2,20 +2,18 @@ package com.springtraining.furnitureshop.controller;
 
 import com.springtraining.furnitureshop.entity.LoginBean;
 import com.springtraining.furnitureshop.service.UserService;
+import com.springtraining.furnitureshop.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.util.List;
+import java.util.Calendar;
 import java.util.Locale;
 
 @Controller
@@ -41,36 +39,19 @@ public class LoginController {
     }
 
     @GetMapping
-    public String displayLoginPage(Model model, HttpSession session) {
+    public String displayLoginPage(Model model, HttpSession session, Locale locale) {
         log.trace("displayLoginPage() start");
         BindingResult errors = (BindingResult) session.getAttribute("login.errors");
         log.info("errors: " + errors);
         model.addAttribute("errors", errors);
         session.removeAttribute("login.errors");
+        Calendar unbanDate = (Calendar) session.getAttribute("unbanDate");
+        log.info("unbanDate: " + unbanDate);
+        if (unbanDate != null) {
+            session.removeAttribute("unbanDate");
+            model.addAttribute("unbanDate", DateUtil.dateToString(unbanDate, locale));
+        }
         log.trace("displayLoginPage() end");
         return "login";
-    }
-
-    @PostMapping
-    public String login(@Valid LoginBean loginBean, BindingResult errors, HttpSession session) {
-        log.trace("login() start");
-        log.info("errors: " + errors);
-        log.info("loginBean: " + loginBean);
-        if (errors.hasErrors()) {
-            session.setAttribute("login.errors", errors);
-            return "redirect:/login";
-        }
-        List<String> loginResult = userService.login(loginBean.getLogin(), loginBean.getPassword());
-        if (loginResult.isEmpty()) {
-            log.info("successful log in");
-            // TODO: 021 21.02.23 add user in session
-        } else {
-            log.info("cannot log in");
-            for (String message : loginResult) {
-                errors.addError(new ObjectError("loginError", message));
-            }
-            session.setAttribute("login.errors", errors);
-        }
-        return "redirect:/login";
     }
 }

@@ -17,6 +17,7 @@ import java.nio.file.StandardOpenOption;
 @Slf4j
 public class AvatarRepositoryImpl implements AvatarRepository {
     private final AvatarProps avatarProps;
+    private static final String PATH_TO_DIRECTORY = "src/main/resources/static/";
 
     @Autowired
     public AvatarRepositoryImpl(AvatarProps avatarProps) {
@@ -27,11 +28,15 @@ public class AvatarRepositoryImpl implements AvatarRepository {
     public void save(MultipartFile multipartFile, String name) throws IOException {
         try {
             log.trace("save start");
-            Path path = Paths.get(avatarProps.getDirectory() + name);
+            Path path = getPath(name);
             log.info("path: " + path);
             Files.write(path, multipartFile.getBytes(), StandardOpenOption.CREATE_NEW);
         } catch (IOException exception) {
             log.error("Cannot save avatar.", exception);
         }
+    }
+
+    private Path getPath(String filename) {
+        return Paths.get(PATH_TO_DIRECTORY + avatarProps.getDirectory() + filename);
     }
 }

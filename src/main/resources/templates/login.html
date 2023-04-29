@@ -16,14 +16,15 @@
         <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/login}" th:object="${loginBean}" method="post">
 
             <span class="login100-form-title" th:text="#{loginPage.title}"></span>
-            <div th:if="${errors!=null and errors.hasGlobalErrors()}">
-                <p th:each="error : ${errors.getGlobalErrors()}" th:text="#{${error.getDefaultMessage()}}"></p>
+            <div class="p-b-10">
+                <div th:if="${param.error}" th:text="#{${session.SPRING_SECURITY_LAST_EXCEPTION.message}}"></div>
+                <div th:if="${unbanDate}" th:text="#{loginPage.message.unlock}+${unbanDate}"></div>
             </div>
-
             <div class="wrap-input100 m-b-16">
                 <input class="input100" type="text" name="login" id="login"
                        th:placeholder="#{loginPage.login}"
                        th:field="*{login}">
+                <span id="loginError" th:text="#{registrationPage.loginError}"></span>
                 <span th:if="${errors!=null and errors.hasFieldErrors('login')}">
                     <th:block th:each="error : ${errors.getFieldErrors('login')}"
                               th:text="${error.getDefaultMessage()}">
@@ -35,6 +36,7 @@
                 <input class="input100" type="password" name="password" id="password"
                        th:placeholder="#{loginPage.password}"
                        th:field="*{password}">
+                <span id="passwordError" th:text="#{registrationPage.passwordError}"></span>
                 <span class="passwordError"
                       th:if="${errors!=null and errors.hasFieldErrors('password')}">
                     <th:block th:each="error : ${errors.getFieldErrors('password')}"
@@ -57,6 +59,6 @@
 </div>
 
 <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
-<!--<script th:src="@{/js/validateLogin.js}"></script>-->
+<script th:src="@{/js/validateLogin.js}"></script>
 </body>
 </html>

@@ -78,7 +78,7 @@ public class RegistrationController {
         captchaService.addCaptcha(captcha, request, response);
         String captchaID = (String) request.getAttribute(Attributes.CAPTCHA_ID);
         log.info("captchaID: " + captchaID);
-        bean.setCaptchaHiddenField(captchaID);
+        bean.setCaptchaID(captchaID);
         model.addAttribute("captcha", captcha);
 
         model.addAttribute("avatarSize",

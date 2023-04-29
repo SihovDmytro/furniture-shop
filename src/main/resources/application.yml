@@ -21,7 +21,7 @@ furnitureshop:
     cookieMaxAge: 30
   user:
     maxLoginAttempts: 3
-    banDuration: 60
+    banDuration: 600
   avatar:
     directory: "avatars/"
     max-file-size: 5MB

@@ -1,9 +1,11 @@
 package com.springtraining.furnitureshop.config;
 
 import com.springtraining.furnitureshop.captcha.strategy.CaptchaProviderStrategy;
-import com.springtraining.furnitureshop.captcha.strategy.impl.CaptchaProviderCookieStrategyImpl;
+import com.springtraining.furnitureshop.captcha.strategy.impl.CaptchaProviderHiddenFieldStrategyImpl;
 import com.springtraining.furnitureshop.domain.User;
 import com.springtraining.furnitureshop.repository.UserRepository;
+import com.springtraining.furnitureshop.security.FailureHandler;
+import com.springtraining.furnitureshop.security.SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,9 +18,17 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 
 @Configuration
 public class SecurityConfig {
+    private final SuccessHandler successHandler;
+    private final FailureHandler failureHandler;
+
+    public SecurityConfig(SuccessHandler successHandler, FailureHandler failureHandler) {
+        this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+    }
+
     @Bean
     public CaptchaProviderStrategy captchaProviderStrategy() {
-        return new CaptchaProviderCookieStrategyImpl();
+        return new CaptchaProviderHiddenFieldStrategyImpl();
     }
 
     @Bean
@@ -35,19 +45,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+        return http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/cart").hasRole(User.Role.USER.toString())
+                .antMatchers("/cart", "/homePage").hasRole(User.Role.USER.toString())
                 .antMatchers("/", "/**").permitAll()
                 .and()
-                .formLogin().loginPage("/login").usernameParameter("login")
-//                    .defaultSuccessUrl("/orders")
+                .formLogin()
+                .loginPage("/login")
+                .usernameParameter("login")
+                .successHandler(successHandler)
+                .failureHandler(failureHandler)
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID")
                 .and()
                 .headers(headers -> headers.referrerPolicy(
-                        (referer)-> referer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
+                        (referer) -> referer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
                 .build();
     }
-
 }

@@ -113,7 +113,7 @@
                            th:field="*{captcha}"
                            th:placeholder="#{registrationPage.captcha}">
                     <input type="hidden" id="captchaID" name="captchaID"
-                           th:field="*{captchaHiddenField}">
+                           th:field="*{captchaID}">
                     <span th:if="${errors!=null and errors.hasFieldErrors('captcha')}">
                         <th:block th:each="error : ${errors.getFieldErrors('captcha')}"
                                   th:text="#{${error.getDefaultMessage()}}">

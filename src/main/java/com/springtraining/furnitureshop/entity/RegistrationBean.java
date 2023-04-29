@@ -48,7 +48,7 @@ public class RegistrationBean {
 
     private MultipartFile avatar;
 
-    private String captchaHiddenField;
+    private String captchaID;
 
     private long pageGenerationTime;
 
