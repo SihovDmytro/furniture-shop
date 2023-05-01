@@ -9,8 +9,12 @@ import com.springtraining.furnitureshop.service.CartService;
 import com.springtraining.furnitureshop.service.CategoryService;
 import com.springtraining.furnitureshop.service.ProducerService;
 import com.springtraining.furnitureshop.service.ProductService;
+import com.springtraining.furnitureshop.util.Attributes;
+import com.springtraining.furnitureshop.util.Constants;
+import com.springtraining.furnitureshop.util.Parameters;
 import com.springtraining.furnitureshop.util.ProductPageProps;
 import com.springtraining.furnitureshop.util.ProductProps;
+import com.springtraining.furnitureshop.util.Views;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +32,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -96,39 +99,38 @@ public class ProductController {
         return new ProductBean();
     }
 
-    @ModelAttribute(name = "locale")
-    public Locale locale(Locale locale) {
-        return locale;
-    }
-
     @ModelAttribute(name = "filters")
     public String filters(@RequestParam MultiValueMap<String, String> params) {
-        params.remove("page");
-        params.remove("size");
+        params.remove(Parameters.PAGE);
+        params.remove(Parameters.SIZE);
         log.info(params.toString());
         StringBuilder filters = new StringBuilder();
+
         for (Map.Entry<String, List<String>> parameter : params.entrySet()) {
             for (String value : parameter.getValue()) {
                 filters.append("&");
                 filters.append(parameter.getKey()).append("=").append(value);
             }
         }
+
         log.info(filters.toString());
         return filters.toString();
     }
 
     @GetMapping
     public String getProductsPage(@Valid ProductBean productBean, Model model) {
-        log.info("getProductsPage() invoked with productBean: " + productBean);
+        log.trace("getProductsPage() start");
+        log.info(Constants.LOGGER_FORMAT, Attributes.PRODUCT_BEAN, productBean);
         setRequiredProperties(productBean);
         Page<Product> products = productService.getProducts(productBean);
         log.info(String.format("found list of products(%s): %s", products.getSize(), products));
-        model.addAttribute("products", products);
+        model.addAttribute(Attributes.PRODUCTS, products);
 
-        List<Integer> pageNumbers = getPageNumbers(products.getTotalPages(), products.getPageable().getPageNumber());
-        log.info("pageNumbers: " + pageNumbers);
-        model.addAttribute("pageNumbers", pageNumbers);
-        return "products";
+        List<Integer> pageNumbers = getPageNumbers(products.getTotalPages(),
+                products.getPageable().getPageNumber());
+        log.info(Attributes.PAGE_SIZE);
+        model.addAttribute(Attributes.PAGE_NUMBERS, pageNumbers);
+        return Views.PRODUCTS;
     }
 
     private void setRequiredProperties(ProductBean productBean) {

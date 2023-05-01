@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @Service
 public class AvatarService {
-    private AvatarRepository avatarRepository;
+    private final AvatarRepository avatarRepository;
 
     @Autowired
     public AvatarService(AvatarRepository avatarRepository) {

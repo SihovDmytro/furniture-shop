@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div th:include="fragments/localization" class="align-right"></div>
+<div th:include="fragments/header"></div>
 
 <form th:action="@{/login/leave}" method="post">
     <img th:src="@{'/images/icons/'+${user.avatar}}" width="64" height="64">

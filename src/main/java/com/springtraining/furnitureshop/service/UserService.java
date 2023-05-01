@@ -7,7 +7,6 @@ import com.springtraining.furnitureshop.util.UserProps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +28,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 
     public Optional<User> getUserByLogin(String login) {
@@ -60,36 +63,4 @@ public class UserService {
         user.setUnban(null);
         userRepository.save(user);
     }
-
-//    public List<String> login(String login, String password) {
-//        Optional<User> userOptional = userRepository.findByLogin(login);
-//        User user = userOptional.orElse(null);
-//        List<String> errors = new ArrayList<>();
-//        if (user == null) {
-//            errors.add("loginPage.message.wrongCredentials");
-//            return errors;
-//        }
-//
-//        if (isUserBanned(user)) {
-//            errors.add("loginPage.message.userIsBanned");
-//            return errors;
-//        } else {
-//            user.setUnban(null);
-//        }
-//
-//        if (!user.getPassword().equals(password)) {
-//            int attempts = user.getAttempts();
-//            if (++attempts >= userProps.getMaxLoginAttempts()) {
-//                Calendar unbanDate = Calendar.getInstance();
-//                unbanDate.add(Calendar.SECOND, userProps.getBanDuration());
-//                user.setUnban(unbanDate);
-//                user.setAttempts(0);
-//            } else {
-//                user.setAttempts(attempts);
-//            }
-//            errors.add("loginPage.message.wrongCredentials");
-//        }
-//        userRepository.save(user);
-//        return errors;
-//    }
 }

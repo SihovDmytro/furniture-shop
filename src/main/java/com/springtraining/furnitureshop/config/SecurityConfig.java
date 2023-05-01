@@ -6,6 +6,8 @@ import com.springtraining.furnitureshop.domain.User;
 import com.springtraining.furnitureshop.repository.UserRepository;
 import com.springtraining.furnitureshop.security.FailureHandler;
 import com.springtraining.furnitureshop.security.SuccessHandler;
+import com.springtraining.furnitureshop.util.Parameters;
+import com.springtraining.furnitureshop.util.Views;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 
 @Configuration
 public class SecurityConfig {
+    public static final String JSESSIONID = "JSESSIONID";
     private final SuccessHandler successHandler;
     private final FailureHandler failureHandler;
 
@@ -48,22 +51,27 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/cart", "/homePage").hasRole(User.Role.USER.toString())
+                .antMatchers(getUrl(Views.CART), getUrl(Views.HOME_PAGE))
+                .hasRole(User.Role.USER.toString())
                 .antMatchers("/", "/**").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .usernameParameter("login")
+                .loginPage(getUrl(Views.LOGIN))
+                .usernameParameter(Parameters.LOGIN)
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl(getUrl(Views.LOGIN))
+                .deleteCookies(JSESSIONID)
                 .and()
                 .headers(headers -> headers.referrerPolicy(
                         (referer) -> referer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
                 .build();
+    }
+
+    private static String getUrl(String view) {
+        return "/" + view;
     }
 }

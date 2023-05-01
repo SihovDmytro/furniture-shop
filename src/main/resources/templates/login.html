@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
 </head>
 <body>
-<div th:include="fragments/localization" class="align-right"></div>
 
-<a th:href="@{/products}">Show products</a>
+<div th:include="fragments/header"></div>
+
 <div class="container-login100">
     <div class="wrap-login100">
         <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/login}" th:object="${loginBean}" method="post">

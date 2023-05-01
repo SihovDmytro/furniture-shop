@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div th:fragment="header">
+    <header>
+        <ul class="navbar">
+            <li><a th:href="@{/login}">Sign in</a></li>
+            <li><a th:href="@{/products}">Products</a></li>
+            <li><div th:include="fragments/localization"></div></li>
+        </ul>
+    </header>
+</div>
+</body>
+</html>
