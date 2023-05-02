@@ -24,12 +24,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Transactional
 public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria {
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
@@ -107,9 +105,7 @@ public class ProductRepositoryCriteriaImpl implements ProductRepositoryCriteria 
 
         if (!bean.isFiltersEmpty()) {
             if (bean.getName() != null) {
-                // TODO: 11.03.2023 check if works
-                predicates.add(builder.like(root.get(Product_.name),
-                        bean.getName()));
+                predicates.add(builder.like(builder.lower(root.get(Product_.name)), "%" + bean.getName() + "%"));
             }
             if (bean.getMinPrice() != null) {
                 predicates.add(builder.greaterThanOrEqualTo(root.get(Product_.price),

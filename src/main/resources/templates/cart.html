@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/webShop.css}">
 </head>
 <body>
-<div th:include="fragments/localization" class="align-right"></div>
+<div th:include="fragments/header"></div>
 
 <div class="content-container">
     <div id="cart-container" th:if="${shoppingCart.size>0}">

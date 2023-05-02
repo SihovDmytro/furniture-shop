@@ -1,10 +1,11 @@
 package com.springtraining.furnitureshop.controller;
 
 import com.springtraining.furnitureshop.entity.LoginBean;
-import com.springtraining.furnitureshop.service.UserService;
+import com.springtraining.furnitureshop.util.Attributes;
+import com.springtraining.furnitureshop.util.Constants;
 import com.springtraining.furnitureshop.util.DateUtil;
+import com.springtraining.furnitureshop.util.Views;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,37 +22,27 @@ import java.util.Locale;
 @RequestMapping(path = "/login")
 public class LoginController {
 
-    private final UserService userService;
-
-    @Autowired
-    public LoginController(UserService userService) {
-        this.userService = userService;
-    }
+    public static final String ERRORS = "login.errors";
 
     @ModelAttribute(name = "loginBean")
     public LoginBean loginBean() {
         return new LoginBean();
     }
 
-    @ModelAttribute(name = "locale")
-    public Locale locale(Locale locale) {
-        return locale;
-    }
-
     @GetMapping
     public String displayLoginPage(Model model, HttpSession session, Locale locale) {
         log.trace("displayLoginPage() start");
-        BindingResult errors = (BindingResult) session.getAttribute("login.errors");
-        log.info("errors: " + errors);
-        model.addAttribute("errors", errors);
-        session.removeAttribute("login.errors");
-        Calendar unbanDate = (Calendar) session.getAttribute("unbanDate");
-        log.info("unbanDate: " + unbanDate);
+        BindingResult errors = (BindingResult) session.getAttribute(ERRORS);
+        log.info(Constants.LOGGER_FORMAT, Attributes.ERRORS, errors);
+        model.addAttribute(Attributes.ERRORS, errors);
+        session.removeAttribute(ERRORS);
+        Calendar unbanDate = (Calendar) session.getAttribute(Attributes.UNBAN_DATE);
+        log.info(Constants.LOGGER_FORMAT, Attributes.UNBAN_DATE, unbanDate);
         if (unbanDate != null) {
-            session.removeAttribute("unbanDate");
-            model.addAttribute("unbanDate", DateUtil.dateToString(unbanDate, locale));
+            session.removeAttribute(Attributes.UNBAN_DATE);
+            model.addAttribute(Attributes.UNBAN_DATE, DateUtil.dateToString(unbanDate, locale));
         }
         log.trace("displayLoginPage() end");
-        return "login";
+        return Views.LOGIN;
     }
 }

@@ -2,7 +2,9 @@ package com.springtraining.furnitureshop.security;
 
 import com.springtraining.furnitureshop.domain.User;
 import com.springtraining.furnitureshop.service.UserService;
-import com.springtraining.furnitureshop.util.UserProps;
+import com.springtraining.furnitureshop.util.Attributes;
+import com.springtraining.furnitureshop.util.Constants;
+import com.springtraining.furnitureshop.util.Views;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,24 +20,24 @@ import java.io.IOException;
 @Component
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserService userService;
-    private final UserProps userProps;
 
     @Autowired
-    public SuccessHandler(UserService userService, UserProps userProps) {
+    public SuccessHandler(UserService userService) {
         this.userService = userService;
-        this.userProps = userProps;
     }
 
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
         log.trace("onAuthenticationSuccess start");
         User user = (User) authentication.getPrincipal();
-        log.info("user: " + user);
+        log.info(Constants.LOGGER_FORMAT, Attributes.USER, user);
         if (user != null && user.getAttempts() > 0) {
             userService.resetFailedAttempts(user.getLogin());
         }
-        super.setDefaultTargetUrl("/homePage");
+        super.setDefaultTargetUrl("/" + Views.HOME_PAGE);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

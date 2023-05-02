@@ -3,7 +3,7 @@ package com.springtraining.furnitureshop.util;
 public class Parameters {
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
-    public static final String REPEAT_PASSWORD = "repeat-password";
+    public static final String CONFIRM = "confirm";
     public static final String NAME = "name";
     public static final String SURNAME = "surname";
     public static final String LOGIN = "login";
@@ -16,7 +16,7 @@ public class Parameters {
     public static final String PRICE = "price";
     public static final String CATEGORY = "category";
     public static final String PRODUCERS = "producer";
-    public static final String PAGE_SIZE = "pageSize";
+    public static final String SIZE = "size";
     public static final String PAGE = "page";
     public static final String SORT_TYPE = "sortType";
     public static final String PRODUCT_ID = "productID";

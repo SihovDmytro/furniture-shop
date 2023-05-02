@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @SpringBootApplication
 public class FurnitureShopApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(FurnitureShopApplication.class, args);
     }

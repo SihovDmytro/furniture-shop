@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div th:include="fragments/localization" class="align-right"></div>
+<div th:include="fragments/header"></div>
 
 <div class="left-sidebar">
     <form class="filter-form" id="filter-form" name="filter-form"
@@ -30,7 +30,7 @@
             </select>
             <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
                 <option th:each="sortOrder : ${sortOrders}"
-                        th:value="${sortOrder}" th:text="${sortOrder}"
+                        th:value="${sortOrder}" th:text="${sortOrder.toString().toLowerCase()}"
                         th:selected="(${sortOrder} == ${productBean.sortOrder})"
                 ></option>
             </select>
