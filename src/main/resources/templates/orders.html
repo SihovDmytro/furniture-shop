@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
     <title th:text="#{ordersPage.title}"></title>
     <meta charset="UTF-8">
@@ -9,13 +9,61 @@
 
 <div th:include="fragments/header"></div>
 
-<form th:action="@{/login/leave}" method="post">
-    <img th:src="@{'/images/icons/'+${user.avatar}}" width="64" height="64">
-    <div>
-        <button id="leave">Leave</button>
+<div class="left-sidebar">
+    <form class="filter-form" id="filter-form" name="filter-form"
+          th:action="@{/orders}" method="get" th:object="${ordersBean}">
+        <div class="page-size-block">
+            <p th:text="#{productsPage.sort}"></p>
+            <select name="sortField" id="sortField" th:field="*{sortField}">
+                <option th:each="sortField : ${sortFields}"
+                        th:value="${sortField}" th:text="${'Sort by ' + sortField.toString().toLowerCase()}"
+                        th:selected="(${sortField} == ${orderBean.sortField})"
+                ></option>
+            </select>
+            <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
+                <option th:each="sortOrder : ${sortOrders}"
+                        th:value="${sortOrder}" th:text="${sortOrder.toString().toLowerCase()}"
+                        th:selected="(${sortOrder} == ${orderBean.sortOrder})"
+                ></option>
+            </select>
+        </div>
+
+        <div>
+            <button id="doFilter" th:text="#{productsPage.apply}"></button>
+        </div>
+    </form>
+</div>
+<div class="main">
+
+    <th:block th:if="${orders.items > 0}">
+        <table class="orders">
+            <th th:text="#{cartPage.price}">PRICE</th>
+            <th th:text="#{ordersPage.items}">ITEMS</th>
+            <th th:text="#{ordersPage.status}">STATUS</th>
+            <th th:text="#{ordersPage.status.description}">DESCRIPTION</th>
+            <th th:text="#{ordersPage.date}">DATE</th>
+
+            <th:block th:each="order : ${orders}">
+                <tr class="order-item">
+                    <div class="order-details">
+                        <td th:text="${order.totalPrice}"></td>
+                        <td th:text="${orders.items}"></td>
+                        <td th:text="${order.status}"></td>
+                        <td th:text="${order.statusDescription}"></td>
+                        <td th:text="${#dates.formatISO(order.date.time)}"></td>
+                    </div>
+                    <div class="order-items"></div>
+                </tr>
+            </th:block>
+        </table>
+    </th:block>
+    <div th:unless="${orders.size() > 0}">
+        <p th:text="#{ordersPage.message.ordersNotFound}"></p>
     </div>
-</form>
+</div>
+
 
 <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/ordersPage.js}"></script>
 </body>
 </html>

@@ -51,7 +51,7 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(getUrl(Views.CART), getUrl(Views.HOME_PAGE))
+                .antMatchers(getUrl(Views.CART), getUrl(Views.HOME_PAGE), getUrl(Views.ORDERS))
                 .hasRole(User.Role.USER.toString())
                 .antMatchers("/", "/**").permitAll()
                 .and()

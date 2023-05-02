@@ -2,6 +2,8 @@ package com.springtraining.furnitureshop.util;
 
 public class Attributes {
     public static final String ERRORS = "errors";
+    public static final String ORDERS = "orders";
+    public static final String ORDERS_BEAN = "ordersBean";
     public static final String PAGE_NUMBERS = "pageNumbers";
     public static final String USERS_SERVICE = "usersService";
     public static final String CAPTCHA_SERVICE = "captchaService";

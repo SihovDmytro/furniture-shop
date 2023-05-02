@@ -44,7 +44,7 @@
                 <td th:text="${shoppingCart.total}"></td>
             </tr>
         </table>
-        <a th:href="@{/order}" th:text="#{cartPage.proceed}"></a>
+        <a th:href="@{/orders}" th:text="#{cartPage.proceed}"></a>
     </div>
     <div id="empty-cart" th:hidden="${shoppingCart.size>0}">
         <p th:text="#{cartPage.emptyCart}"></p>

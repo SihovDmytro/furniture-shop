@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status;
 
-    @Column(name = "statusDescription", nullable = true, length = 45)
+    @Column(name = "status_description", nullable = true, length = 45)
     private String statusDescription;
 
     @Column(name = "date", nullable = false)
@@ -65,5 +66,13 @@ public class Order {
 
     public List<ProductInfo> getProducts() {
         return Collections.unmodifiableList(products);
+    }
+
+    public BigDecimal getTotalPrice() {
+        BigDecimal total = new BigDecimal(0);
+        for (ProductInfo productInfo : products) {
+            total = total.add(productInfo.getPrice());
+        }
+        return total;
     }
 }

@@ -26,4 +26,5 @@ public class Parameters {
     public static final String DEFAULT_LOCALE = "defaultLocale";
     public static final String LOCALIZATION_PROVIDER = "localizationProvider";
     public static final String LANGUAGE = "lang";
+    public static final String ID = "id";
 }
