@@ -1,12 +1,9 @@
 package com.springtraining.furnitureshop.domain;
 
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,30 +11,23 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor()
 @Entity
 @Table(name = "orders")
 public class Order {
     @GeneratedValue(generator = "ID_GENERATOR")
     @Id
-    @Column(name = "order_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
-    // TODO: 11.03.2023 refactor
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
@@ -49,30 +39,26 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
 
-    @Setter(AccessLevel.NONE)
-    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "orders_product_info",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_info_id")})
-    private List<ProductInfo> products = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
     public enum OrderStatus {
-        ACCEPTED, CONFIRMED, FORMED, PROCESSING, SENT, COMPLETED, CANCELED
-    }
+        ACCEPTED("order.status.accepted"),
+        CONFIRMED("order.status.confirmed"),
+        FORMED("order.status.formed"),
+        PROCESSING("order.status.processing"),
+        SENT("order.status.sent"),
+        COMPLETED("order.status.completed"),
+        CANCELED("order.status.canceled");
 
-    public List<ProductInfo> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
-    public BigDecimal getTotalPrice() {
-        BigDecimal total = new BigDecimal(0);
-        for (ProductInfo productInfo : products) {
-            total = total.add(productInfo.getPrice());
+        OrderStatus(String localizationTag) {
+            this.localizationTag = localizationTag;
         }
-        return total;
+
+        private final String localizationTag;
+
+        public String getLocalizationTag() {
+            return localizationTag;
+        }
     }
 }

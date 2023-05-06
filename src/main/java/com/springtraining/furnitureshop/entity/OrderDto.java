@@ -1,12 +1,15 @@
 package com.springtraining.furnitureshop.entity;
 
 import com.springtraining.furnitureshop.domain.Order;
+import com.springtraining.furnitureshop.util.DateUtil;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.sql.Timestamp;
 
 public interface OrderDto {
-    BigDecimal getTotalPrice();
+    Long getId();
+
+    BigDecimal getPrice();
 
     int getItems();
 
@@ -14,5 +17,15 @@ public interface OrderDto {
 
     String getStatusDescription();
 
-    Calendar getDate();
+    Timestamp getDate();
+
+    default String getString() {
+        return String.format("OrderDto{id=%d, price=%s, items=%d, status=%s, statusDescription='%s', date=%s}",
+                getId(),
+                getPrice().toPlainString(),
+                getItems(),
+                getStatus(),
+                getStatusDescription(),
+                DateUtil.timestampToString(getDate()));
+    }
 }

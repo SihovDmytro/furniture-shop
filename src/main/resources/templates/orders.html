@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{ordersPage.title}"></title>
     <meta charset="UTF-8">
@@ -12,18 +12,19 @@
 <div class="left-sidebar">
     <form class="filter-form" id="filter-form" name="filter-form"
           th:action="@{/orders}" method="get" th:object="${ordersBean}">
+
         <div class="page-size-block">
             <p th:text="#{productsPage.sort}"></p>
             <select name="sortField" id="sortField" th:field="*{sortField}">
                 <option th:each="sortField : ${sortFields}"
-                        th:value="${sortField}" th:text="${'Sort by ' + sortField.toString().toLowerCase()}"
-                        th:selected="(${sortField} == ${orderBean.sortField})"
+                        th:value="${sortField}" th:text="#{${sortField.localizationTag}}"
+                        th:selected="(${sortField} == ${ordersBean.sortField})"
                 ></option>
             </select>
             <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
                 <option th:each="sortOrder : ${sortOrders}"
-                        th:value="${sortOrder}" th:text="${sortOrder.toString().toLowerCase()}"
-                        th:selected="(${sortOrder} == ${orderBean.sortOrder})"
+                        th:value="${sortOrder}" th:text="#{${'direction.'+sortOrder.toString().toLowerCase()}}"
+                        th:selected="(${sortOrder} == ${ordersBean.sortOrder})"
                 ></option>
             </select>
         </div>
@@ -35,33 +36,44 @@
 </div>
 <div class="main">
 
-    <th:block th:if="${orders.items > 0}">
+    <th:block th:if="${orders.content.size() > 0}">
         <table class="orders">
-            <th th:text="#{cartPage.price}">PRICE</th>
-            <th th:text="#{ordersPage.items}">ITEMS</th>
-            <th th:text="#{ordersPage.status}">STATUS</th>
-            <th th:text="#{ordersPage.status.description}">DESCRIPTION</th>
-            <th th:text="#{ordersPage.date}">DATE</th>
-
-            <th:block th:each="order : ${orders}">
-                <tr class="order-item">
-                    <div class="order-details">
-                        <td th:text="${order.totalPrice}"></td>
-                        <td th:text="${orders.items}"></td>
-                        <td th:text="${order.status}"></td>
-                        <td th:text="${order.statusDescription}"></td>
-                        <td th:text="${#dates.formatISO(order.date.time)}"></td>
-                    </div>
-                    <div class="order-items"></div>
+            <tr class="order-item-title">
+                <th class="order-column" th:text="#{ordersPage.totalPrice}">PRICE</th>
+                <th class="order-column" th:text="#{ordersPage.items}">ITEMS</th>
+                <th class="order-column" th:text="#{ordersPage.status}">STATUS</th>
+                <th class="order-column" th:text="#{ordersPage.status.description}">DESCRIPTION</th>
+                <th class="order-column" th:text="#{ordersPage.date}">DATE</th>
+            </tr>
+            <th:block th:each="order : ${orders.content}">
+                <tr class="order-details" th:onclick="'getProductInfos('+${order.id}+')'">
+                    <td class="order-column" th:text="${order.price}"></td>
+                    <td class="order-column" th:text="${order.items}"></td>
+                    <td class="order-column" th:text="#{${order.status.localizationTag}}"></td>
+                    <td class="order-column" th:text="${order.statusDescription}"></td>
+                    <td class="order-column"
+                        th:text="${#dates.format(order.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+                <tr hidden th:id="'productInfoHeaderRow'+${order.id}" class="product-info-row">
+                    <td colspan="5">
+                        <table class="order-items" th:id="'productInfoTable'+${order.id}">
+                            <tr>
+                                <th th:text="#{productsPage.price}"></th>
+                                <th th:text="#{productsPage.name}"></th>
+                                <th th:text="#{productsPage.category}"></th>
+                                <th th:text="#{productsPage.producer}"></th>
+                                <th th:text="#{productInfo.description}"></th>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </th:block>
         </table>
     </th:block>
-    <div th:unless="${orders.size() > 0}">
+    <div th:unless="${orders.content.size() > 0}">
         <p th:text="#{ordersPage.message.ordersNotFound}"></p>
     </div>
 </div>
-
 
 <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
 <script th:src="@{/js/ordersPage.js}"></script>

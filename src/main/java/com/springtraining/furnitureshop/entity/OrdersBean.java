@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrdersBean {
+
     private OrderSortOption sortField;
 
     private Sort.Direction sortOrder;

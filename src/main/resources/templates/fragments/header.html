@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div th:fragment="header">
     <header>
         <ul class="navbar">
-            <li><a th:href="@{/login}">Sign in</a></li>
-            <li><a th:href="@{/products}">Products</a></li>
-            <li><div th:include="fragments/localization"></div></li>
+            <li><a th:href="@{/login}" th:text="#{loginPage.title}"></a></li>
+            <li><a th:href="@{/products}" th:text="#{productsPage.title}"></a></li>
+            <div sec:authorize="hasRole('USER')">
+                <a th:href="@{/homePage}" th:text="#{homePage.title}"></a>
+                <a th:href="@{/orders}" th:text="#{ordersPage.title}"></a>
+            </div>
+            <li>
+                <div th:include="fragments/localization"></div>
+            </li>
         </ul>
     </header>
 </div>

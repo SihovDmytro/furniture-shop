@@ -24,13 +24,13 @@
             <p th:text="#{productsPage.sort}"></p>
             <select name="sortField" id="sortField" th:field="*{sortField}">
                 <option th:each="sortField : ${sortFields}"
-                        th:value="${sortField}" th:text="${'Sort by ' + sortField}"
+                        th:value="${sortField}" th:text="${sortField}"
                         th:selected="(${sortField} == ${productBean.sortField})"
                 ></option>
             </select>
             <select name="sortOrder" id="sortOrder" th:field="*{sortOrder}">
                 <option th:each="sortOrder : ${sortOrders}"
-                        th:value="${sortOrder}" th:text="${sortOrder.toString().toLowerCase()}"
+                        th:value="${sortOrder}" th:text="#{${'direction.'+sortOrder.toString().toLowerCase()}}"
                         th:selected="(${sortOrder} == ${productBean.sortOrder})"
                 ></option>
             </select>

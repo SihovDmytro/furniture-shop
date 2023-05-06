@@ -63,7 +63,7 @@ public class User implements UserDetails {
     @Column(length = 25, nullable = false)
     private String avatar;
 
-    private User() {
+    public User() {
     }
 
     public User(String login, String name, String surname, String password, String email, boolean sendMail, Role role, int attempts, Calendar unban, String avatar) {

@@ -73,9 +73,9 @@ public class CartController {
                                                          @Valid @RequestBody CartRequestBody cartRequestBody,
                                                          Errors errors) {
         log.trace("putProduct start");
-        log.info(String.format("change quantity of product with id=%s, quantity=%s",
+        log.info("change quantity of product with id={}, quantity={}",
                 cartRequestBody.getProductID(),
-                cartRequestBody.getQuantity()));
+                cartRequestBody.getQuantity());
         log.info(Constants.LOGGER_FORMAT, Attributes.ERRORS, errors);
         if (errors.getErrorCount() > 0) {
             return ResponseEntity.notFound().build();

@@ -1,5 +1,7 @@
 package com.springtraining.furnitureshop.util;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -13,5 +15,9 @@ public class DateUtil {
         return formatter.format(LocalDateTime.ofInstant(
                 calendar.toInstant(),
                 calendar.getTimeZone().toZoneId()));
+    }
+
+    public static String timestampToString(Timestamp timestamp) {
+        return new SimpleDateFormat(FORMAT).format(timestamp);
     }
 }

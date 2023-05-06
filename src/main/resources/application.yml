@@ -25,14 +25,18 @@ furnitureshop:
   avatar:
     directory: "avatars/"
     max-file-size: 5MB
-  products:
+  pagination:
     paginationRange: 4
     pageSizes:
       - 5
       - 10
       - 25
       - 100
-
+  orders:
+    defaults:
+      sortOrder: desc
+      sortField: date
+  products:
     defaults:
       page: 1
       size: 5

@@ -11,8 +11,8 @@ import com.springtraining.furnitureshop.service.ProducerService;
 import com.springtraining.furnitureshop.service.ProductService;
 import com.springtraining.furnitureshop.util.Attributes;
 import com.springtraining.furnitureshop.util.Constants;
+import com.springtraining.furnitureshop.util.PaginationProps;
 import com.springtraining.furnitureshop.util.Parameters;
-import com.springtraining.furnitureshop.util.ProductPageProps;
 import com.springtraining.furnitureshop.util.ProductProps;
 import com.springtraining.furnitureshop.util.Views;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +42,14 @@ public class ProductController {
     private final CategoryService categoryService;
     private final ProducerService producerService;
     private final CartService cartService;
-    private final ProductPageProps pageProps;
+    private final PaginationProps pageProps;
     private final ProductProps productProps;
 
     @Autowired
     public ProductController(ProductService productService,
                              CategoryService categoryService,
                              ProducerService producerService,
-                             ProductPageProps pageProps,
+                             PaginationProps pageProps,
                              CartService cartService,
                              ProductProps productProps) {
         this.productService = productService;
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @ModelAttribute(name = "pageProperties")
-    public ProductPageProps pageProperties() {
+    public PaginationProps pageProperties() {
         return pageProps;
     }
 
