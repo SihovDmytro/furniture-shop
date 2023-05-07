@@ -21,11 +21,13 @@ function getProductInfos(id) {
                 for (let i = 1; i <= response.length; i++) {
                     let row = productInfoTable.insertRow(i);
                     let j = 0;
-                    row.insertCell(j++).innerHTML = response[i - 1].price;
-                    row.insertCell(j++).innerHTML = response[i - 1].name;
-                    row.insertCell(j++).innerHTML = response[i - 1].category.name;
-                    row.insertCell(j++).innerHTML = response[i - 1].producer.name;
-                    row.insertCell(j++).innerHTML = response[i - 1].description;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.price * response[i - 1].quantity;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.price;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.name;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.category.name;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.producer.name;
+                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.description;
+                    row.insertCell(j++).innerHTML = response[i - 1].quantity;
                 }
                 fetchedOrders.push(id);
             }

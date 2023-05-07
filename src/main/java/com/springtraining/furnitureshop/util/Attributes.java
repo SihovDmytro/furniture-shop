@@ -2,6 +2,7 @@ package com.springtraining.furnitureshop.util;
 
 public class Attributes {
     public static final String ERRORS = "errors";
+    public static final String ORDER_CREATED = "orderCreated";
     public static final String ORDER_ITEMS = "orderItems";
     public static final String ORDERS = "orders";
     public static final String ORDERS_BEAN = "ordersBean";

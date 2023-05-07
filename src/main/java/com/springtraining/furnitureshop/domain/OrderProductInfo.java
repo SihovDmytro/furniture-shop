@@ -1,5 +1,6 @@
 package com.springtraining.furnitureshop.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
-@NoArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "orders_product_info")
 public class OrderProductInfo {
@@ -25,15 +25,21 @@ public class OrderProductInfo {
 
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("productInfoId")
     @JoinColumn(name = "product_info_ID", insertable = false, updatable = false)
     private ProductInfo productInfo;
+
+    public OrderProductInfo(int quantity, Order order, ProductInfo productInfo) {
+        this.quantity = quantity;
+        this.order = order;
+        this.productInfo = productInfo;
+    }
 
     @Embeddable
     public static class Id implements Serializable {

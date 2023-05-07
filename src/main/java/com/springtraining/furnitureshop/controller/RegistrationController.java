@@ -9,6 +9,7 @@ import com.springtraining.furnitureshop.service.UserService;
 import com.springtraining.furnitureshop.util.Attributes;
 import com.springtraining.furnitureshop.util.AvatarProps;
 import com.springtraining.furnitureshop.util.Constants;
+import com.springtraining.furnitureshop.util.LocalizationTags;
 import com.springtraining.furnitureshop.util.Parameters;
 import com.springtraining.furnitureshop.util.RandomUtil;
 import com.springtraining.furnitureshop.util.Views;
@@ -37,10 +38,6 @@ import java.util.Optional;
 public class RegistrationController {
     public static final String ERRORS = "registration.errors";
     public static final String AVATAR_SIZE = "%dKB";
-    public static final String EXPIRED_PAGE = "registrationPage.message.expiredPage";
-    public static final String EXISTING_LOGIN = "registrationPage.message.existingLogin";
-    public static final String WRONG_CAPTCHA = "registrationPage.message.wrongCaptcha";
-    public static final String DIFFERENT_PASSWORDS = "registrationPage.message.differentPasswords";
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -129,22 +126,22 @@ public class RegistrationController {
                                           HttpServletRequest request) {
         if (isPageExpired(bean)) {
             errors.addError(new ObjectError(Attributes.REGISTRATION_BEAN,
-                    EXPIRED_PAGE));
+                    LocalizationTags.EXPIRED_PAGE));
         }
         if (userService.getUserByLogin(bean.getLogin()).isPresent()) {
             errors.addError(new FieldError(Attributes.REGISTRATION_BEAN,
                     Parameters.LOGIN,
-                    EXISTING_LOGIN));
+                    LocalizationTags.EXISTING_LOGIN));
         }
         if (!validateCaptcha(bean, request)) {
             errors.addError(new FieldError(Attributes.REGISTRATION_BEAN,
                     Parameters.CAPTCHA,
-                    WRONG_CAPTCHA));
+                    LocalizationTags.WRONG_CAPTCHA));
         }
         if (!bean.getPassword().equals(bean.getConfirm())) {
             errors.addError(new FieldError(Attributes.REGISTRATION_BEAN,
                     Parameters.CONFIRM,
-                    DIFFERENT_PASSWORDS));
+                    LocalizationTags.DIFFERENT_PASSWORDS));
         }
     }
 

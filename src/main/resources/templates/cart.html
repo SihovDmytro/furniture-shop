@@ -44,7 +44,9 @@
                 <td th:text="${shoppingCart.total}"></td>
             </tr>
         </table>
-        <a th:href="@{/orders}" th:text="#{cartPage.proceed}"></a>
+        <form method="post" th:action="@{/orders}">
+            <button th:text="#{cartPage.proceed}"></button>
+        </form>
     </div>
     <div id="empty-cart" th:hidden="${shoppingCart.size>0}">
         <p th:text="#{cartPage.emptyCart}"></p>

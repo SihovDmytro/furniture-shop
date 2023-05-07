@@ -35,4 +35,12 @@ public class ProductInfo {
 
     @Column(name = "description", nullable = true, length = 100)
     private String description;
+
+    public ProductInfo(Product product) {
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.category = product.getCategory();
+        this.producer = product.getProducer();
+        this.description = product.getDescription();
+    }
 }

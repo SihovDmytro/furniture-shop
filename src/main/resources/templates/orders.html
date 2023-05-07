@@ -36,6 +36,8 @@
 </div>
 <div class="main">
 
+    <p th:if="${orderCreated}" th:text="#{${orderCreated}}"></p>
+
     <th:block th:if="${orders.content.size() > 0}">
         <table class="orders">
             <tr class="order-item-title">
@@ -58,11 +60,13 @@
                     <td colspan="5">
                         <table class="order-items" th:id="'productInfoTable'+${order.id}">
                             <tr>
-                                <th th:text="#{productsPage.price}"></th>
+                                <th th:text="#{ordersPage.totalPrice}"></th>
+                                <th th:text="#{ordersPage.priceForItem}"></th>
                                 <th th:text="#{productsPage.name}"></th>
                                 <th th:text="#{productsPage.category}"></th>
                                 <th th:text="#{productsPage.producer}"></th>
                                 <th th:text="#{productInfo.description}"></th>
+                                <th th:text="#{productInfo.quantity}"></th>
                             </tr>
                         </table>
                     </td>
