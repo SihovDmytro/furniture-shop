@@ -16,10 +16,13 @@
         <form class="login-tag-form p-l-55 p-r-55 p-t-178" th:action="@{/logout}" method="post">
     <span class="login100-form-title">
         <p th:text="#{homePage.welcome}+${user.login}"></p>
-                <img th:src="@{${'/avatars/'+user.avatar}}" width="64" height="64">
+        <img th:src="@{${'/avatars/'+user.avatar}}" width="64" height="64">
     </span>
-            <div class="p-t-13 p-b-23"></div>
+            <div class="p-t-13 p-b-23">
+                <a th:href="@{/orders}" th:text="#{ordersPage.title}"></a>
+            </div>
             <div class="container-login100-form-btn">
+
                 <button class="login100-form-btn" id="leave" th:text="#{homePage.leave}"></button>
             </div>
         </form>

@@ -1,7 +1,7 @@
 package com.springtraining.furnitureshop.domain;
 
 
-import lombok.ToString;
+import com.springtraining.furnitureshop.util.DateUtil;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +19,9 @@ import javax.persistence.TemporalType;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
-@ToString
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
@@ -63,7 +63,7 @@ public class User implements UserDetails {
     @Column(length = 25, nullable = false)
     private String avatar;
 
-    private User() {
+    public User() {
     }
 
     public User(String login, String name, String surname, String password, String email, boolean sendMail, Role role, int attempts, Calendar unban, String avatar) {
@@ -214,5 +214,21 @@ public class User implements UserDetails {
         int result = login != null ? login.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", sendMail=" + sendMail +
+                ", role=" + role +
+                ", attempts=" + attempts +
+                ", unban=" + DateUtil.dateToString(unban, Locale.getDefault()) +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

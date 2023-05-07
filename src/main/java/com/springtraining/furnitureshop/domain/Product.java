@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class Product {
     @GeneratedValue(generator = "ID_GENERATOR")
     @Id
-    @Column(name = "product_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 45)
@@ -50,7 +50,7 @@ public class Product {
         this.image = image;
     }
 
-    private Product() {
+    public Product() {
     }
 
     public String getName() {

@@ -1,69 +1,85 @@
 package com.springtraining.furnitureshop.domain;
 
 
+import com.springtraining.furnitureshop.util.DateUtil;
+import com.springtraining.furnitureshop.util.LocalizationTags;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.Locale;
 
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "orders")
 public class Order {
     @GeneratedValue(generator = "ID_GENERATOR")
     @Id
-    @Column(name = "order_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
-    // TODO: 11.03.2023 refactor
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
 
-    @Column(name = "statusDescription", nullable = true, length = 45)
+    @Column(name = "status_description", nullable = true, length = 45)
     private String statusDescription;
 
     @Column(name = "date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
 
-    @Setter(AccessLevel.NONE)
-    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "orders_product_info",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_info_id")})
-    private List<ProductInfo> products = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(optional = false)
     private User user;
 
-    public enum OrderStatus {
-        ACCEPTED, CONFIRMED, FORMED, PROCESSING, SENT, COMPLETED, CANCELED
+    public Order(OrderStatus status, String statusDescription, Calendar date, User user) {
+        this.status = status;
+        this.statusDescription = statusDescription;
+        this.date = date;
+        this.user = user;
     }
 
-    public List<ProductInfo> getProducts() {
-        return Collections.unmodifiableList(products);
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", status=" + status +
+                ", statusDescription='" + statusDescription + '\'' +
+                ", date=" + DateUtil.dateToString(date, Locale.getDefault()) +
+                ", user=" + user +
+                '}';
+    }
+
+    public enum OrderStatus {
+        ACCEPTED(LocalizationTags.ORDER_STATUS_ACCEPTED),
+        CONFIRMED(LocalizationTags.ORDER_STATUS_CONFIRMED),
+        FORMED(LocalizationTags.ORDER_STATUS_FORMED),
+        PROCESSING(LocalizationTags.ORDER_STATUS_PROCESSING),
+        SENT(LocalizationTags.ORDER_STATUS_SENT),
+        COMPLETED(LocalizationTags.ORDER_STATUS_COMPLETED),
+        CANCELED(LocalizationTags.ORDER_STATUS_CANCELED);
+
+        OrderStatus(String localizationTag) {
+            this.localizationTag = localizationTag;
+        }
+
+        private final String localizationTag;
+
+        public String getLocalizationTag() {
+            return localizationTag;
+        }
     }
 }

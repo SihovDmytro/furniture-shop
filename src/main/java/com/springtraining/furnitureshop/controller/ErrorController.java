@@ -2,6 +2,7 @@ package com.springtraining.furnitureshop.controller;
 
 import com.springtraining.furnitureshop.util.Attributes;
 import com.springtraining.furnitureshop.util.Constants;
+import com.springtraining.furnitureshop.util.LocalizationTags;
 import com.springtraining.furnitureshop.util.Views;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,15 +18,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/errorPage")
 public class ErrorController {
 
-    public static final String TITLE = "error.title";
-
     @GetMapping
     public String displayErrorPage(Model model, HttpSession session, HttpServletRequest request) {
         log.trace("displayErrorPage start");
-        String title = (String) session.getAttribute(TITLE);
-        log.info(Constants.LOGGER_FORMAT, TITLE, title);
-        model.addAttribute(Attributes.TITLE, title == null ? TITLE : title);
-        session.removeAttribute(TITLE);
+        String title = (String) session.getAttribute(LocalizationTags.ERROR_TITLE);
+        log.info(Constants.LOGGER_FORMAT, LocalizationTags.ERROR_TITLE, title);
+        model.addAttribute(Attributes.TITLE, title == null ? LocalizationTags.ERROR_TITLE : title);
+        session.removeAttribute(LocalizationTags.ERROR_TITLE);
 
         String referrer = request.getHeader(Attributes.REFERRER);
         log.info(Constants.LOGGER_FORMAT, Attributes.REFERRER, referrer);

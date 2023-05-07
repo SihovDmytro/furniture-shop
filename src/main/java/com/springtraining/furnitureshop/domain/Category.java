@@ -1,7 +1,8 @@
 package com.springtraining.furnitureshop.domain;
 
 
-import lombok.*;
+import lombok.NonNull;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Category {
         this.name = name;
     }
 
-    private Category() {
+    public Category() {
     }
 
     public Long getId() {

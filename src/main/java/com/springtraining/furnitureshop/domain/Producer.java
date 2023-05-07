@@ -24,7 +24,7 @@ public class Producer {
         this.name = name;
     }
 
-    private Producer() {
+    public Producer() {
     }
 
     public Long getId() {

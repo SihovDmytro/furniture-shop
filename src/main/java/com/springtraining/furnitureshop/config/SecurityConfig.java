@@ -3,18 +3,15 @@ package com.springtraining.furnitureshop.config;
 import com.springtraining.furnitureshop.captcha.strategy.CaptchaProviderStrategy;
 import com.springtraining.furnitureshop.captcha.strategy.impl.CaptchaProviderHiddenFieldStrategyImpl;
 import com.springtraining.furnitureshop.domain.User;
-import com.springtraining.furnitureshop.repository.UserRepository;
 import com.springtraining.furnitureshop.security.FailureHandler;
 import com.springtraining.furnitureshop.security.SuccessHandler;
 import com.springtraining.furnitureshop.util.Parameters;
 import com.springtraining.furnitureshop.util.Views;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
@@ -23,10 +20,13 @@ public class SecurityConfig {
     public static final String JSESSIONID = "JSESSIONID";
     private final SuccessHandler successHandler;
     private final FailureHandler failureHandler;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(SuccessHandler successHandler, FailureHandler failureHandler) {
+    @Autowired
+    public SecurityConfig(SuccessHandler successHandler, FailureHandler failureHandler, UserDetailsService userDetailsService) {
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -35,23 +35,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return (username -> userRepository
-                .findByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found")));
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .userDetailsService(userDetailsService)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(getUrl(Views.CART), getUrl(Views.HOME_PAGE))
+                .antMatchers(getUrl(Views.HOME_PAGE), getUrl(Views.ORDERS))
                 .hasRole(User.Role.USER.toString())
                 .antMatchers("/", "/**").permitAll()
                 .and()
