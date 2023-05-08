@@ -19,4 +19,6 @@ public class LocalizationTags {
     public static final String ORDER_STATUS_COMPLETED = "order.status.completed";
     public static final String ORDER_STATUS_CANCELED = "order.status.canceled";
     public static final String FILE_SIZE_LIMIT = "error.title.fileSizeLimit";
+    public static final String LOCKED_ACCOUNT = "loginPage.message.userIsBanned";
+    public static final String BAD_CREDENTIALS = "loginPage.message.wrongCredentials";
 }

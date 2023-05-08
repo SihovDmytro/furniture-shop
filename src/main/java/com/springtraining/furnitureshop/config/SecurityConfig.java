@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .failureHandler(failureHandler)
                 .and()
                 .logout()
-                .logoutUrl("/logout")
+                .logoutUrl(getUrl(Views.LOGOUT))
                 .logoutSuccessUrl(getUrl(Views.LOGIN))
                 .deleteCookies(JSESSIONID)
                 .and()

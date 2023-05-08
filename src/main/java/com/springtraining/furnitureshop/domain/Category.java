@@ -48,11 +48,11 @@ public class Category {
 
         Category category = (Category) o;
 
-        return name.equals(category.name);
+        return getName().equals(category.name);
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return getName().hashCode();
     }
 }

@@ -2,14 +2,12 @@ package com.springtraining.furnitureshop.domain;
 
 
 import lombok.NonNull;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@ToString
 @Entity
 public class Producer {
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -24,7 +22,15 @@ public class Producer {
         this.name = name;
     }
 
-    public Producer() {
+    protected Producer() {
+    }
+
+    @Override
+    public String toString() {
+        return "Producer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public Long getId() {
@@ -46,7 +52,7 @@ public class Producer {
 
         Producer producer = (Producer) o;
 
-        return name.equals(producer.name);
+        return getName().equals(producer.name);
     }
 
     @Override

@@ -19,8 +19,8 @@ function updateCart(id, e) {
             let tableCart = document.getElementById("cart");
             let currRow = e.parentElement.parentElement.rowIndex;
 
-            tableCart.rows[currRow].cells[4].innerHTML = response.total;
-            tableCart.rows[tableCart.rows.length - 1].cells[1].innerHTML = response.cartPrice;
+            tableCart.rows[currRow].cells[4].innerHTML = getLocalizedString(response.total);
+            tableCart.rows[tableCart.rows.length - 1].cells[1].innerHTML = getLocalizedString(response.cartPrice);
         }
     })
 }
@@ -36,7 +36,7 @@ function deleteFromCart(id, row) {
             let tableCart = document.getElementById("cart");
             let currRow = row.parentElement.rowIndex;
             tableCart.deleteRow(currRow);
-            tableCart.rows[tableCart.rows.length - 1].cells[1].innerHTML = response.cartPrice;
+            tableCart.rows[tableCart.rows.length - 1].cells[1].innerHTML = getLocalizedString(response.cartPrice);
             if (tableCart.rows.length <= 2) {
                 hideCart();
             }

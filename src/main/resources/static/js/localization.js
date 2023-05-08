@@ -5,3 +5,14 @@ function changeLanguage() {
     console.log(params)
     document.location.search = params;
 }
+
+function getLocalizedString(string){
+    let locale = document.getElementById("select-locale").value;
+    console.log("locale: "+locale)
+    return string.toLocaleString(locale, {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2,
+        minimumIntegerDigits:1,
+        maximumIntegerDigits:9
+    });
+}

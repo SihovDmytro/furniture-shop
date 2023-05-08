@@ -1,8 +1,6 @@
 package com.springtraining.furnitureshop.domain;
 
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 
-@EqualsAndHashCode(exclude = "id")
-@ToString
 @Entity
 @Table(name = "product")
 public class Product {
@@ -41,7 +38,12 @@ public class Product {
     @Column(name = "image", nullable = true, length = 45)
     private @NonNull String image;
 
-    public Product(@NonNull String name, @NonNull BigDecimal price, @NonNull Category category, @NonNull Producer producer, @NonNull String description, @NonNull String image) {
+    public Product(@NonNull String name,
+                   @NonNull BigDecimal price,
+                   @NonNull Category category,
+                   @NonNull Producer producer,
+                   @NonNull String description,
+                   @NonNull String image) {
         this.name = name;
         this.price = price;
         this.category = category;
@@ -50,7 +52,43 @@ public class Product {
         this.image = image;
     }
 
-    public Product() {
+    protected Product() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return getName().equals(product.name)
+                && getPrice().equals(product.price)
+                && getCategory().equals(product.category)
+                && getProducer().equals(product.producer)
+                && getDescription().equals(product.description)
+                && getImage().equals(product.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(),
+                getPrice(),
+                getCategory(),
+                getProducer(),
+                getDescription(),
+                getImage());
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", producer=" + producer +
+                ", description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                '}';
     }
 
     public String getName() {

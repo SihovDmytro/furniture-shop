@@ -32,8 +32,8 @@
                                step="1"
                                th:onclick="'updateCart('+${entry.key.id}+', this);'"
                                th:value="${entry.value}"/></td>
-                    <td th:text="${entry.key.price}"></td>
-                    <td th:text="${shoppingCart.getTotalForProduct(entry.key)}"></td>
+                    <td th:text="${#numbers.formatDecimal(entry.key.price,1,2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(shoppingCart.getTotalForProduct(entry.key),1,2)}"></td>
                     <td th:onclick="'deleteFromCart('+${entry.key.id}+', this);'">
                         <img th:src="@{images/icons/trash.png}" width="32" height="32"/>
                     </td>
@@ -41,7 +41,7 @@
             </th:block>
             <tr>
                 <td th:text="#{cartPage.cartPrice}"></td>
-                <td th:text="${shoppingCart.total}"></td>
+                <td th:text="${#numbers.formatDecimal(shoppingCart.total,3,2)}"></td>
             </tr>
         </table>
         <form method="post" th:action="@{/orders}">

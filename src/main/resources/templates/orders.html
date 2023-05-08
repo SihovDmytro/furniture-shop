@@ -49,12 +49,12 @@
             </tr>
             <th:block th:each="order : ${orders.content}">
                 <tr class="order-details" th:onclick="'getProductInfos('+${order.id}+')'">
-                    <td class="order-column" th:text="${order.price}"></td>
+                    <td class="order-column" th:text="${#numbers.formatDecimal(order.price,1,2)}"></td>
                     <td class="order-column" th:text="${order.items}"></td>
                     <td class="order-column" th:text="#{${order.status.localizationTag}}"></td>
                     <td class="order-column" th:text="${order.statusDescription}"></td>
-                    <td class="order-column"
-                        th:text="${#dates.format(order.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td class="order-column" th:with="format=#{date.format}"
+                        th:text="${#dates.format(order.date, format)}"></td>
                 </tr>
                 <tr hidden th:id="'productInfoHeaderRow'+${order.id}" class="product-info-row">
                     <td colspan="5">

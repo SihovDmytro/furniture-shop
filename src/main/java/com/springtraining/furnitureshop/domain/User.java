@@ -63,10 +63,19 @@ public class User implements UserDetails {
     @Column(length = 25, nullable = false)
     private String avatar;
 
-    public User() {
+    protected User() {
     }
 
-    public User(String login, String name, String surname, String password, String email, boolean sendMail, Role role, int attempts, Calendar unban, String avatar) {
+    public User(String login,
+                String name,
+                String surname,
+                String password,
+                String email,
+                boolean sendMail,
+                Role role,
+                int attempts,
+                Calendar unban,
+                String avatar) {
         this.login = login;
         this.name = name;
         this.surname = surname;
@@ -205,14 +214,14 @@ public class User implements UserDetails {
 
         User user = (User) o;
 
-        if (!Objects.equals(login, user.login)) return false;
-        return Objects.equals(email, user.email);
+        if (!Objects.equals(getLogin(), user.login)) return false;
+        return Objects.equals(getEmail(), user.email);
     }
 
     @Override
     public int hashCode() {
-        int result = login != null ? login.hashCode() : 0;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
+        int result = getLogin() != null ? getLogin().hashCode() : 0;
+        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
         return result;
     }
 

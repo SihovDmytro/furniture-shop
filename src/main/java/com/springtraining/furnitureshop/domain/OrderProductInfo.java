@@ -1,9 +1,5 @@
 package com.springtraining.furnitureshop.domain;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -15,8 +11,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "orders_product_info")
 public class OrderProductInfo {
@@ -41,6 +35,62 @@ public class OrderProductInfo {
         this.productInfo = productInfo;
     }
 
+    protected OrderProductInfo() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderProductInfo that = (OrderProductInfo) o;
+        return getQuantity() == that.quantity
+                && Objects.equals(getOrder(), that.order)
+                && Objects.equals(getProductInfo(), that.productInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getQuantity(), getOrder(), getProductInfo());
+    }
+
+    @Override
+    public String toString() {
+        return "OrderProductInfo{" +
+                "id=" + id +
+                ", quantity=" + quantity +
+                ", order=" + order +
+                ", productInfo=" + productInfo +
+                '}';
+    }
+
+    public Id getId() {
+        return id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public ProductInfo getProductInfo() {
+        return productInfo;
+    }
+
+    public void setProductInfo(ProductInfo productInfo) {
+        this.productInfo = productInfo;
+    }
+
     @Embeddable
     public static class Id implements Serializable {
         @Column(name = "order_id")
@@ -61,7 +111,8 @@ public class OrderProductInfo {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Id id = (Id) o;
-            return Objects.equals(orderId, id.orderId) && Objects.equals(productInfoId, id.productInfoId);
+            return Objects.equals(orderId, id.orderId)
+                    && Objects.equals(productInfoId, id.productInfoId);
         }
 
         @Override

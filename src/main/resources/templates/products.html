@@ -24,7 +24,7 @@
             <p th:text="#{productsPage.sort}"></p>
             <select name="sortField" id="sortField" th:field="*{sortField}">
                 <option th:each="sortField : ${sortFields}"
-                        th:value="${sortField}" th:text="${sortField}"
+                        th:value="${sortField}" th:text="#{${'productsPage.' + sortField}}"
                         th:selected="(${sortField} == ${productBean.sortField})"
                 ></option>
             </select>
@@ -95,7 +95,7 @@
                     <hr>
                     <p th:text="${product.name}"></p>
                     <p th:text="${product.description}"></p>
-                    <p th:text="'Price: '+ ${product.price} + ' UAN'"></p>
+                    <p th:text="#{cartPage.price} + ' ' + ${#numbers.formatDecimal(product.price,1,2)} + ' ' + #{productsPage.uan}"></p>
                     <hr>
                     <button th:onclick="'addToCart('+${product.id}+');'"
                             th:text="#{productsPage.message.addToCart}">

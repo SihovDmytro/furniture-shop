@@ -21,8 +21,9 @@ function getProductInfos(id) {
                 for (let i = 1; i <= response.length; i++) {
                     let row = productInfoTable.insertRow(i);
                     let j = 0;
-                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.price * response[i - 1].quantity;
-                    row.insertCell(j++).innerHTML = response[i - 1].productInfo.price;
+                    let total = response[i - 1].productInfo.price * response[i - 1].quantity;
+                    row.insertCell(j++).innerHTML = getLocalizedString(total);
+                    row.insertCell(j++).innerHTML = getLocalizedString(response[i - 1].productInfo.price);
                     row.insertCell(j++).innerHTML = response[i - 1].productInfo.name;
                     row.insertCell(j++).innerHTML = response[i - 1].productInfo.category.name;
                     row.insertCell(j++).innerHTML = response[i - 1].productInfo.producer.name;

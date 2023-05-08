@@ -8,4 +8,5 @@ public class Views {
     public static final String ORDERS = "orders";
     public static final String PRODUCTS = "products";
     public static final String REGISTRATION = "registration";
+    public static final String LOGOUT = "logout";
 }
