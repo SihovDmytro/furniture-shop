@@ -1,0 +1,7 @@
+target/
+*.iml
+.idea/
+.git/
+*.md
+Dump20240523.sql
+
