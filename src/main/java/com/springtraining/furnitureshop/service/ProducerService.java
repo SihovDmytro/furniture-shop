@@ -16,6 +16,11 @@ public class ProducerService {
         this.producerRepository = producerRepository;
     }
 
+    /**
+     * Returns all producers.
+     *
+     * @return a {@link List} of all {@link Producer} entities
+     */
     public List<Producer> findAll() {
         return producerRepository.findAll();
     }
