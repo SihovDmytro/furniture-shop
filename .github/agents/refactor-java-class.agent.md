@@ -1,10 +1,10 @@
 ---
 name: refactor-java-class
-description: >-
-  Refactors Java classes to improve code quality without changing business logic.
-  Use this agent whenever a Java class needs to be cleaned up, restructured, or
-  modernized while preserving its exact runtime behaviour.
-tools: ['read_file', 'replace_string_in_file', 'insert_edit_into_file', 'get_errors', 'semantic_search', 'grep_search', 'file_search']
+description: '>-'
+Refactors Java classes to improve code quality without changing business logic.: ''
+Use this agent whenever a Java class needs to be cleaned up, restructured, or: ''
+modernized while preserving its exact runtime behaviour.: ''
+tools: ['read_file', 'replace_string_in_file', 'insert_edit_into_file', 'get_errors', 'semantic_search', 'grep_search', 'file_search', 'apply_patch', 'show_content']
 ---
 # Agent: Refactor Java Class
 
@@ -87,4 +87,3 @@ Apply refactors from this list only. Do **not** change method signatures visible
 5. Summarise changes.
 ```
 ````
-
