@@ -36,7 +36,7 @@ class AvatarRepositoryImplTest {
     }
 
     @Test
-    public void shouldSaveNewFile() throws IOException {
+    void shouldSaveNewFile() throws IOException {
         when(file.getBytes()).thenReturn(new byte[]{});
         avatarRepository.save(file, FILE_PNG);
         Assertions.assertTrue(Files.exists(getPath()));

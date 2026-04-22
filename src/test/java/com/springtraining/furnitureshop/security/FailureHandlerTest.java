@@ -21,13 +21,21 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 class FailureHandlerTest {
-    UserService userService;
-    HttpServletRequest request;
-    HttpServletResponse response;
-    HttpSession session;
-    AuthenticationException exception;
-    UserProps userProps = new UserProps(3, 600);
 
+    private static final String TEST_LOGIN = "testLogin";
+    private static final String TEST_NAME = "testName";
+    private static final String TEST_SURNAME = "testSurname";
+    private static final String TEST_PASSWORD = "testPassword";
+    private static final String TEST_EMAIL = "test@email.com";
+    private static final int MAX_ATTEMPTS = 3;
+    private static final int BAN_DURATION = 600;
+
+    private UserService userService;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private HttpSession session;
+    private AuthenticationException exception;
+    private final UserProps userProps = new UserProps(MAX_ATTEMPTS, BAN_DURATION);
 
     @BeforeEach
     void setUp() {
@@ -39,8 +47,8 @@ class FailureHandlerTest {
     }
 
     @Test
-    public void shouldIncreaseFailedAttempts() throws ServletException, IOException {
-        User user = getUser();
+    void shouldIncreaseFailedAttempts() throws ServletException, IOException {
+        User user = buildUser(0);
 
         when(request.getParameter(Parameters.LOGIN)).thenReturn(user.getLogin());
         when(userService.getUserByLogin(user.getLogin())).thenReturn(Optional.of(user));
@@ -53,9 +61,8 @@ class FailureHandlerTest {
     }
 
     @Test
-    public void shouldBanUserWhenAttemptsLimitIsReached() throws ServletException, IOException {
-        User user = getUser();
-        user.setAttempts(userProps.getMaxLoginAttempts());
+    void shouldBanUserWhenAttemptsLimitIsReached() throws ServletException, IOException {
+        User user = buildUser(userProps.getMaxLoginAttempts());
 
         when(request.getParameter(Parameters.LOGIN)).thenReturn(user.getLogin());
         when(userService.getUserByLogin(user.getLogin())).thenReturn(Optional.of(user));
@@ -68,15 +75,14 @@ class FailureHandlerTest {
         Mockito.verify(userService, times(1)).resetFailedAttempts(user.getLogin());
     }
 
-
-    public User getUser() {
-        return new User("login",
-                "name",
-                "surname",
-                "password",
-                "email@email.com",
+    private User buildUser(int attempts) {
+        return new User(TEST_LOGIN,
+                TEST_NAME,
+                TEST_SURNAME,
+                TEST_PASSWORD,
+                TEST_EMAIL,
                 false, User.Role.USER,
-                0,
+                attempts,
                 null,
                 "");
     }

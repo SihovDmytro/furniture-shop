@@ -19,11 +19,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CaptchaProviderCookieStrategyImplTest {
-    private CaptchaProviderCookieStrategyImpl captchaProvider = new CaptchaProviderCookieStrategyImpl();
+
+    private static final String CAPTCHA_VALUE = "1234560";
+    private static final String CAPTCHA_ID_1 = "1";
+
+    private final CaptchaProviderCookieStrategyImpl captchaProvider = new CaptchaProviderCookieStrategyImpl();
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private static ServletContext context;
-
+    private ServletContext context;
 
     @BeforeEach
     void setUp() {
@@ -33,28 +36,26 @@ class CaptchaProviderCookieStrategyImplTest {
     }
 
     @Test
-    public void shouldPutCaptchaIDInCookie() {
+    void shouldPutCaptchaIDInCookie() {
         when(request.getServletContext()).thenReturn(context);
-        String captcha = "1234560";
         when(context.getAttribute(Attributes.CAPTCHA_MAP)).thenReturn(null);
 
-        captchaProvider.addCaptcha(captcha, request, response);
+        captchaProvider.addCaptcha(CAPTCHA_VALUE, request, response);
 
         verify(response, times(1)).addCookie(any());
     }
 
     @Test
-    public void shouldReturnCaptchaValue() {
-        when(request.getServletContext()).thenReturn(context);
-        String captchaValue = "1234560";
+    void shouldReturnCaptchaValue() {
         Map<String, String> captchaMap = new HashMap<>();
         captchaMap.put("1231231", "222222");
-        captchaMap.put("1", captchaValue);
+        captchaMap.put(CAPTCHA_ID_1, CAPTCHA_VALUE);
         captchaMap.put("2", "654321");
+        when(request.getServletContext()).thenReturn(context);
         when(context.getAttribute(Attributes.CAPTCHA_MAP)).thenReturn(captchaMap);
-        Cookie cookie = new Cookie(Attributes.CAPTCHA_ID, "1");
+        Cookie cookie = new Cookie(Attributes.CAPTCHA_ID, CAPTCHA_ID_1);
         when(request.getCookies()).thenReturn(new Cookie[]{cookie});
 
-        Assertions.assertEquals(captchaValue, captchaProvider.getCaptcha(request).get());
+        Assertions.assertEquals(CAPTCHA_VALUE, captchaProvider.getCaptcha(request).get());
     }
 }
