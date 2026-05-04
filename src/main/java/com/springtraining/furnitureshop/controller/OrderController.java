@@ -129,8 +129,7 @@ public class OrderController {
 
     private Pageable getPage(OrdersBean bean) {
         int size = Integer.MAX_VALUE;
-        int currentPage = 1;
-        currentPage--;
+        int currentPage = 0;
         Sort.Direction direction = bean.getSortOrder() == null ? ordersProps.getSortOrder() : bean.getSortOrder();
         OrderSortOption sortField = bean.getSortField() == null ? ordersProps.getSortField() : bean.getSortField();
         return PageRequest.of(

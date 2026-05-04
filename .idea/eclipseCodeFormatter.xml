@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EclipseCodeFormatterProjectSettings">
+    <option name="selectedGlobalProfile">
+      <Settings>
+        <option name="formatter" value="ECLIPSE" />
+        <option name="id" value="1686414024829" />
+        <option name="importOrderConfigFilePath" value="C:/tools/files/hybris-organizeimports.importorder" />
+        <option name="importOrderFromFile" value="true" />
+        <option name="name" value="McK-profile" />
+        <option name="pathToConfigFileJava" value="C:/tools/files/hybris-codestyle-20180921.xml" />
+        <option name="selectedJavaProfile" value="hybris" />
+      </Settings>
+    </option>
+  </component>
+</project>

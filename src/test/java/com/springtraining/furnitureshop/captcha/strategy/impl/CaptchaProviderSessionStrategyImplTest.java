@@ -18,10 +18,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CaptchaProviderSessionStrategyImplTest {
+
+    private static final String CAPTCHA_VALUE = "1234560";
+
     private HttpServletRequest request;
     private HttpServletResponse response;
     private HttpSession session;
-    private CaptchaProviderStrategy captchaProvider = new CaptchaProviderSessionStrategyImpl();
+    private final CaptchaProviderStrategy captchaProvider = new CaptchaProviderSessionStrategyImpl();
 
     @BeforeEach
     void setUp() {
@@ -31,21 +34,19 @@ class CaptchaProviderSessionStrategyImplTest {
     }
 
     @Test
-    public void shouldPutCaptchaInSession() {
+    void shouldPutCaptchaInSession() {
         when(request.getSession()).thenReturn(session);
-        String captcha = "1234560";
 
-        captchaProvider.addCaptcha(captcha, request, response);
+        captchaProvider.addCaptcha(CAPTCHA_VALUE, request, response);
 
-        verify(session, times(1)).setAttribute(Attributes.CAPTCHA, captcha);
+        verify(session, times(1)).setAttribute(Attributes.CAPTCHA, CAPTCHA_VALUE);
     }
 
     @Test
-    public void shouldReturnCaptchaValue() {
+    void shouldReturnCaptchaValue() {
         when(request.getSession()).thenReturn(session);
-        String captchaValue = "1234560";
-        when(session.getAttribute(Attributes.CAPTCHA)).thenReturn(captchaValue);
+        when(session.getAttribute(Attributes.CAPTCHA)).thenReturn(CAPTCHA_VALUE);
 
-        Assertions.assertEquals(captchaValue, captchaProvider.getCaptcha(request).get());
+        Assertions.assertEquals(CAPTCHA_VALUE, captchaProvider.getCaptcha(request).get());
     }
 }

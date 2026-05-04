@@ -16,6 +16,11 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * Returns all product categories.
+     *
+     * @return a {@link List} of all {@link Category} entities
+     */
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
